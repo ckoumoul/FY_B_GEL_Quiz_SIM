@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φυσική Β΄ ΓΕΛ - 11η Εβδομάδα: Συνδεσμολογία Αντιστατών</title>
+    <style>
+        :root {
+            --bg-color: #f7f4ef;
+            --text-color: #3a322b;
+            --primary-terracotta: #7a4b29;
+            --primary-hover: #633b1f;
+            --secondary-olive: #4e6e52;
+            --secondary-hover: #3d5740;
+            --accent-ochre: #d4b886;
+            --card-bg: #ffffff;
+            --border-color: #e2dacd;
+            --correct-bg: #eaf2eb;
+            --correct-border: #4e6e52;
+            --incorrect-bg: #fbeaea;
+            --incorrect-border: #a83b3b;
+            --hint-bg: #fdf8ec;
+            --hint-border: #d4b886;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(58, 50, 43, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--primary-terracotta);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        header h2 {
+            color: var(--secondary-olive);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #fcfbfa;
+            color: var(--text-color);
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-terracotta);
+        }
+
+        .mode-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mode-card {
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            background-color: #fdfcfb;
+        }
+
+        .mode-card:hover {
+            border-color: var(--primary-terracotta);
+            transform: translateY(-2px);
+        }
+
+        .mode-card.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .mode-card h3 {
+            color: var(--primary-terracotta);
+            margin-bottom: 8px;
+        }
+
+        .mode-card p {
+            font-size: 0.9rem;
+            color: #665a50;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-terracotta);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-olive);
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .btn-hint {
+            background-color: transparent;
+            color: var(--primary-terracotta);
+            border: 1px dashed var(--primary-terracotta);
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        .btn-hint:hover {
+            background-color: #f7ede5;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary-olive);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--secondary-olive);
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #fcfbfa;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-ochre);
+            background-color: #fbf8f3;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .option-item.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            color: #1e3b23;
+        }
+
+        .option-item.incorrect {
+            border-color: var(--incorrect-border);
+            background-color: var(--incorrect-bg);
+            color: #5c1919;
+        }
+
+        .option-item input {
+            margin-right: 12px;
+            accent-color: var(--primary-terracotta);
+        }
+
+        .hint-box {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 16px;
+            background-color: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #594833;
+        }
+
+        .justification-box {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background-color: var(--correct-bg);
+            border-left: 4px solid var(--correct-border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #1e3b23;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .report-header {
+            background-color: #f7ede5;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .report-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-terracotta);
+            margin: 10px 0;
+        }
+
+        .report-meta {
+            font-size: 0.95rem;
+            color: #5c5046;
+            margin-bottom: 12px;
+        }
+
+        .pedagogical-comment {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--secondary-olive);
+            padding: 12px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+        }
+
+        .report-item {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .report-item.correct-item {
+            border-left: 6px solid var(--correct-border);
+        }
+
+        .report-item.incorrect-item {
+            border-left: 6px solid var(--incorrect-border);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .badge-success {
+            background-color: var(--correct-bg);
+            color: var(--correct-border);
+        }
+
+        .badge-danger {
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .alert-box {
+            padding: 12px 16px;
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+            border: 1px solid var(--incorrect-border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            .report-actions, .quiz-footer, header p {
+                display: none !important;
+            }
+            .report-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Φυσική Β΄ ΓΕΛ (Γενικής Παιδείας)</h1>
+        <h2>11η Εβδομάδα: Κεφάλαιο 2.5 – Συνδεσμολογία Αντιστατών (Σειρά & Παράλληλα)</h2>
+    </header>
+
+    <!-- ΑΡΧΙΚΗ ΟΘΟΝΗ -->
+    <div id="start-screen">
+        <div class="form-group">
+            <label for="student-name">Ονοματεπώνυμο Μαθητή/τριας (Προαιρετικό):</label>
+            <input type="text" id="student-name" placeholder="Π.χ. Κωνσταντίνος Κουμουλίδης">
+        </div>
+
+        <div class="form-group">
+            <label>Επιλέξτε Λειτουργία Quiz:</label>
+            <div class="mode-selection">
+                <div class="mode-card selected" id="mode-practice-card" onclick="selectMode('practice')">
+                    <h3>🎮 Εκμάθηση & Εξάσκησή</h3>
+                    <p>Βήμα-βήμα υποβολή με άμεση ανατροφοδότηση, υπόδειξη και αιτιολογία σε κάθε ερώτηση.</p>
+                </div>
+                <div class="mode-card" id="mode-exam-card" onclick="selectMode('exam')">
+                    <h3>📝 Προσομοίωση & Τεστ</h3>
+                    <p>Συγκεντρωτική εμφάνιση όλων των ερωτήσεων. Υποβολή στο τέλος με αναλυτικό Report.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-primary" onclick="startQuiz()" style="font-size: 1.1rem; padding: 14px 40px;">Έναρξη Quiz</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ QUIZ -->
+    <div id="quiz-screen" style="display: none;">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div id="alert-msg" class="alert-box"></div>
+
+        <div id="questions-container"></div>
+
+        <div class="quiz-footer">
+            <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()" style="display: none;">← Προηγούμενη</button>
+            <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Επόμενη →</button>
+            <button class="btn btn-primary" id="btn-submit" onclick="submitQuiz()" style="display: none;">Ολοκλήρωση & Υποβολή</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ REPORT -->
+    <div id="report-screen" style="display: none;">
+        <div class="report-header">
+            <h2 id="report-student-name" style="color: var(--primary-terracotta);">Αναφορά Αποτελεσμάτων</h2>
+            <div class="report-meta" id="report-meta-info"></div>
+            <div class="report-score" id="report-score-display">0 / 0</div>
+            <div class="pedagogical-comment" id="report-comment"></div>
+        </div>
+
+        <h3 style="margin-bottom: 20px; color: var(--primary-terracotta);">Αναλυτική Επισκόπηση Ερωτήσεων</h3>
+        <div id="report-details-container"></div>
+
+        <div class="report-actions">
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Εκτύπωση / Αποθήκευση σε PDF</button>
+            <button class="btn btn-primary" onclick="restartQuiz()">↻ Έναρξη από την αρχή</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questionsData = [
+        {
+            id: 1,
+            question: "Ποια πρόταση περιγράφει σωστά τη συνδεσμολογία αντιστατών σε σειρά;",
+            options: [
+                "Η τάση στα άκρα κάθε αντιστάτη είναι ίδια",
+                "Η ένταση του ρεύματος είναι ίδια σε όλους τους αντιστάτες (I_ολ = I1 = I2 = I3)",
+                "Η ισοδύναμη αντίσταση είναι μικρότερη από τη μικρότερη αντίσταση",
+                "Αν διακοπεί ένας κλάδος, οι υπόλοιποι συνεχίζουν να λειτουργούν ανεξάρτητα"
+            ],
+            correct: 1,
+            hint: "Στη σύνδεση σε σειρά υπάρχει μία μοναδική διαδρομή για το ηλεκτρικό ρεύμα.",
+            justification: "Στη σύνδεση σε σειρά, λόγω της ύπαρξης μίας μόνο αγώγιμης διαδρομής, όλα τα ηλεκτρικά στοιχεία διαρρέονται από την ίδια ακριβώς ένταση ρεύματος I_ολ = I1 = I2 = I3."
+        },
+        {
+            id: 2,
+            question: "Ποια είναι η μαθηματική σχέση υπολογισμού της ισοδύναμης αντίστασης R_ολ τριών αντιστατών R1, R2, R3 που συνδέονται σε σειρά;",
+            options: [
+                "1/R_ολ = 1/R1 + 1/R2 + 1/R3",
+                "R_ολ = R1 + R2 + R3",
+                "R_ολ = (R1 · R2 · R3) / (R1 + R2 + R3)",
+                "R_ολ = (R1 + R2 + R3) / 3"
+            ],
+            correct: 1,
+            hint: "Στη σύνδεση σε σειρά οι αντιστάσεις προστίθενται αλγεβρικά.",
+            justification: "Η ισοδύναμη αντίσταση R_ολ συστήματος αντιστατών σε σειρά ισούται με το άθροισμα των επιμέρους αντιστάσεων: R_ολ = R1 + R2 + R3. Συνεπώς R_ολ > R_max."
+        },
+        {
+            id: 3,
+            question: "Τι συμβαίνει στην ολική τάση V_ολ στα άκρα συστήματος αντιστατών που συνδέονται σε σειρά;",
+            options: [
+                "Είναι ίση με την τάση στα άκρα κάθε αντιστάτη (V_ολ = V1 = V2 = V3)",
+                "Ισούται με το άθροισμα των επιμέρους τάσεων (V_ολ = V1 + V2 + V3)",
+                "Είναι πάντα μηδέν",
+                "Είναι αντίστροφα ανάλογη της συνολικής έντασης"
+            ],
+            correct: 1,
+            hint: "Η συνολική ενέργεια ανά μονάδα φορτίου μοιράζεται στις επιμέρους πτώσεις τάσης.",
+            justification: "Στη σύνδεση σε σειρά, η ολική διαφορά δυναμικού V_ολ ισούται με το άθροισμα των μερικών τάσεων στα άκρα κάθε αντιστάτη: V_ολ = V1 + V2 + V3."
+        },
+        {
+            id: 4,
+            question: "Ποια πρόταση περιγράφει σωστά την παράλληλη συνδεσμολογία αντιστατών;",
+            options: [
+                "Η διαφορά δυναμικού (τάση) είναι κοινή στα άκρα κάθε αντιστάτη (V_ολ = V1 = V2 = V3)",
+                "Η ένταση του ρεύματος είναι ίδια σε όλους τους κλάδους",
+                "Η ισοδύναμη αντίσταση είναι μεγαλύτερη από τη μεγαλύτερη αντίσταση του συστήματος",
+                "Αν καεί ένας λαμπτήρας, σβήνουν όλοι οι υπόλοιποι"
+            ],
+            correct: 0,
+            hint: "Στην παράλληλη σύνδεση όλοι οι αντιστάτες συνδέονται στα ίδια δύο σημεία (κοινοί κόμβοι).",
+            justification: "Επειδή όλοι οι παράλληλοι αντιστάτες συνδέονται ανάμεσα στα ίδια δύο κοινά σημεία του κυκλώματος, η διαφορά δυναμικού στα άκρα καθενός είναι ίδια με την ολική τάση: V_ολ = V1 = V2 = V3."
+        },
+        {
+            id: 5,
+            question: "Ποια είναι η σχέση για την ολική ένταση ρεύματος I_ολ που εισέρχεται σε παράλληλη σύνδεση 3 αντιστατών (βάσει του 1ου Κανόνα Kirchhoff);",
+            options: [
+                "I_ολ = I1 = I2 = I3",
+                "I_ολ = I1 + I2 + I3",
+                "I_ολ = (I1 + I2 + I3) / 3",
+                "I_ολ = I1 · I2 · I3"
+            ],
+            correct: 1,
+            hint: "Το ολικό ρεύμα διακλαδίζεται στους παράλληλους κλάδους.",
+            justification: "Βάσει του 1ου Κανόνα του Kirchhoff (διατήρηση φορτίου), η συνολική ένταση ρεύματος που εισέρχεται στον κόμβο ισούται με το άθροισμα των εντάσεων των ρευμάτων των επιμέρους κλάδων: I_ολ = I1 + I2 + I3."
+        },
+        {
+            id: 6,
+            question: "Ποιος είναι ο τύπος της ισοδύναμης αντίστασης R_ολ για ΔΥΟ αντιστάτες R1 και R2 που συνδέονται παράλληλα;",
+            options: [
+                "R_ολ = R1 + R2",
+                "R_ολ = (R1 · R2) / (R1 + R2)",
+                "R_ολ = (R1 + R2) / (R1 · R2)",
+                "R_ολ = R1 · R2"
+            ],
+            correct: 1,
+            hint: "Προκύπτει από την ομόνυμη πρόσθεση των αντιστρόφων 1/R_ολ = 1/R1 + 1/R2 = (R1+R2)/(R1·R2).",
+            justification: "Για δύο παράλληλους αντιστάτες ισχύει 1/R_ολ = 1/R1 + 1/R2 = (R1+R2)/(R1·R2). Αντιστρέφοντας το κλάσμα προκύπτει R_ολ = (R1 · R2) / (R1 + R2) (γινόμενο δια άθροισμα)."
+        },
+        {
+            id: 7,
+            question: "Πώς συγκρίνεται η ισοδύναμη αντίσταση R_ολ μιας παράλληλης σύνδεσης αντιστατών με τις επιμέρους αντιστάσεις του συστήματος;",
+            options: [
+                "Η R_ολ είναι πάντα μεγαλύτερη από τη μεγαλύτερη αντίσταση",
+                "Η R_ολ είναι πάντα μικρότερη από τη μικρότερη αντίσταση του συστήματος (R_ολ < R_min)",
+                "Η R_ολ ισούται με τον αριθμητικό μέσο όρο των αντιστάσεων",
+                "Η R_ολ είναι πάντα ίση με μηδέν"
+            ],
+            correct: 1,
+            hint: "Προσθέτοντας παράλληλους κλάδους ανοίγουμε περισσότερες αγώγιμες διαδρομές για το ρεύμα.",
+            justification: "Η παράλληλη σύνδεση αυξάνει τη συνολική διατομή διέλευσης του ρεύματος, μειώνοντας τη συνολική αντίσταση. Η ισοδύναμη αντίσταση R_ολ είναι πάντα μικρότερη από τη μικρότερη αντίσταση του συστήματος (R_ολ < R_min)."
+        },
+        {
+            id: 8,
+            question: "Γιατί στις οικιακές ηλεκτρικές εγκαταστάσεις οι ηλεκτρικές συσκευές συνδέονται ΠΑΡΑΛΛΗΛΑ και όχι σε σειρά;",
+            options: [
+                "Γιατί έτσι αυξάνεται η συνολική αντίσταση του σπιτιού",
+                "Γιατί όλες οι συσκευές δέχονται την ίδια τάση δικτύου (230 V) και λειτουργούν ανεξάρτητα (αν απενεργοποιηθεί μία, οι άλλες συνεχίζουν να λειτουργούν)",
+                "Γιατί σε σειρά οι συσκευές θα είχαν μεγαλύτερο ρεύμα",
+                "Γιατί η παράλληλη σύνδεση καταργεί την ανάγκη για ασφάλειες"
+            ],
+            correct: 1,
+            hint: "Σκεφτείτε τι θα συνέβαινε αν σβήνατε μια λάμπα και έσβηναν ταυτόχρονα το ψυγείο και η τηλεόραση.",
+            justification: "Η παράλληλη σύνδεση εξασφαλίζει ότι όλες οι συσκευές εφαρμόζουν την ονομαστική τάση του δικτύου (230 V) και λειτουργούν ανεξάρτητα: αν μία συσκευή κλείσει ή βλαβεί, οι υπόλοιποι κλάδοι συνεχίζουν να διαρρέονται από ρεύμα."
+        },
+        {
+            id: 9,
+            question: "Τρεις αντιστάτες R1 = 10 Ω, R2 = 20 Ω και R3 = 30 Ω συνδέονται σε σειρά και στα άκρα του συστήματος εφαρμόζεται τάση V_ολ = 12 V. Πόση είναι η ισοδύναμη αντίσταση R_ολ και η ένταση I_ολ;",
+            options: [
+                "R_ολ = 60 Ω και I_ολ = 0.2 A",
+                "R_ολ = 6 Ω και I_ολ = 2 A",
+                "R_ολ = 60 Ω και I_ολ = 5 A",
+                "R_ολ = 20 Ω και I_ολ = 0.6 A"
+            ],
+            correct: 0,
+            hint: "Υπολογίστε R_ολ = R1 + R2 + R3 και μετά εφαρμόστε I_ολ = V_ολ / R_ολ.",
+            justification: "R_ολ = R1 + R2 + R3 = 10 + 20 + 30 = 60 Ω. Στη συνέχεια, I_ολ = V_ολ / R_ολ = 12 V / 60 Ω = 0.2 A."
+        },
+        {
+            id: 10,
+            question: "Στο κύκλωμα της προηγούμενης ερώτησης (σε σειρά: R1=10 Ω, R2=20 Ω, R3=30 Ω, I_ολ = 0.2 A), πόση είναι η τάση V2 στα άκρα του αντιστάτη R2;",
+            options: [
+                "V2 = 2 V",
+                "V2 = 4 V",
+                "V2 = 6 V",
+                "V2 = 12 V"
+            ],
+            correct: 1,
+            hint: "Εφαρμόστε τον Νόμο του Ohm για τον αντιστάτη R2: V2 = I_ολ · R2.",
+            justification: "Επειδή το ρεύμα είναι κοινό (I_ολ = 0.2 A), η τάση στον R2 είναι V2 = I_ολ · R2 = 0.2 A · 20 Ω = 4 V. (Αντίστοιχα V1 = 2V, V3 = 6V και V1+V2+V3 = 12V)."
+        },
+        {
+            id: 11,
+            question: "Δύο αντιστάτες R1 = 6 Ω και R2 = 12 Ω συνδέονται παράλληλα. Πόση είναι η ισοδύναμη αντίσταση R_ολ του συστήματος;",
+            options: [
+                "R_ολ = 18 Ω",
+                "R_ολ = 4 Ω",
+                "R_ολ = 72 Ω",
+                "R_ολ = 2 Ω"
+            ],
+            correct: 1,
+            hint: "Εφαρμόστε τον τύπο R_ολ = (R1 · R2) / (R1 + R2).",
+            justification: "R_ολ = (R1 · R2) / (R1 + R2) = (6 · 12) / (6 + 12) = 72 / 18 = 4 Ω. (Παρατηρήστε ότι 4 Ω < 6 Ω, δηλαδή R_ολ < R_min)."
+        },
+        {
+            id: 12,
+            question: "Στα άκρα της παράλληλης σύνδεσης των αντιστατών R1 = 6 Ω και R2 = 12 Ω (με R_ολ = 4 Ω) εφαρμόζεται τάση V_ολ = 12 V. Ποιες είναι οι εντάσεις των ρευμάτων I1 και I2 που διαρρέουν τους δύο κλάδους;",
+            options: [
+                "I1 = 2 A και I2 = 1 A (I_ολ = 3 A)",
+                "I1 = 1 A και I2 = 2 A (I_ολ = 3 A)",
+                "I1 = 12 A και I2 = 6 A",
+                "I1 = 0.5 A και I2 = 0.5 A"
+            ],
+            correct: 0,
+            hint: "Η τάση είναι κοινή (V1 = V2 = 12 V). Εφαρμόστε I1 = V / R1 και I2 = V / R2.",
+            justification: "I1 = V / R1 = 12 V / 6 Ω = 2 A. I2 = V / R2 = 12 V / 12 Ω = 1 A. Το ολικό ρεύμα είναι I_ολ = I1 + I2 = 2 + 1 = 3 A (επαλήθευση: I_ολ = V/R_ολ = 12/4 = 3 A)."
+        },
+        {
+            id: 13,
+            question: "Τρεις ΙΣΟΙ αντιστάτες R1 = R2 = R3 = R συνδέονται παράλληλα. Πόση είναι η ισοδύναμη αντίσταση R_ολ του συστήματος;",
+            options: [
+                "R_ολ = 3R",
+                "R_ολ = R / 3",
+                "R_ολ = R",
+                "R_ολ = R / 9"
+            ],
+            correct: 1,
+            hint: "1/R_ολ = 1/R + 1/R + 1/R = 3/R.",
+            justification: "1/R_ολ = 1/R + 1/R + 1/R = 3/R => R_ολ = R / 3. Γενικά για N ίσους παράλληλους αντιστάτες ισχύει R_ολ = R / N."
+        },
+        {
+            id: 14,
+            question: "Ποιος είναι ο αυστηρός ΔΙΔΑΚΤΙΚΟΣ ΠΕΡΙΟΡΙΣΜΟΣ της ύλης της 11ης εβδομάδας σύμφωνα με τις οδηγίες του ΙΕΠ;",
+            options: [
+                "Μελέτη μόνο συνδεσμολογιών σε σειρά",
+                "Περιορισμός των εφαρμογών και ασκήσεων σε κυκλώματα με έως και 3 αντιστάτες",
+                "Απαγόρευση χρήσης του νόμου του Ohm",
+                "Μελέτη μόνο κυκλωμάτων εναλλασσόμενου ρεύματος (AC)"
+            ],
+            correct: 1,
+            hint: "Σκεφτείτε τον μέγιστο αριθμό αντιστατών που επιτρέπεται στα παραδείγματα και τις ασκήσεις της Β΄ Λυκείου.",
+            justification: "Σύμφωνα με τις επίσημες οδηγίες διδασκαλίας του ΙΕΠ, υπάρχει αυστηρός διδακτικός περιορισμός για τη μελέτη κυκλωμάτων που περιέχουν το πολύ 3 αντιστάτες σε όλα τα παραδείγματα και τις ασκήσεις."
+        },
+        {
+            id: 15,
+            question: "Αν σε ένα κύκλωμα με 3 αντιστάτες σε σειρά αυξήσουμε την τιμή του ενός αντιστάτη, τι συμβαίνει στην ισοδύναμη αντίσταση R_ολ και στην ολική ένταση I_ολ (υπό σταθερή τάση V_ολ);",
+            options: [
+                "Η R_ολ αυξάνεται και η I_ολ μειώνεται",
+                "Η R_ολ μειώνεται και η I_ολ αυξάνεται",
+                "Και η R_ολ και η I_ολ αυξάνονται",
+                "Η R_ολ παραμένει σταθερή"
+            ],
+            correct: 0,
+            hint: "R_ολ = R1 + R2 + R3. Αν αυξηθεί ένας όρος, το άθροισμα μεγαλώνει. Μετά εφαρμόστε I_ολ = V_ολ / R_ολ.",
+            justification: "Επειδή R_ολ = R1 + R2 + R3, η αύξηση οποιασδήποτε αντίστασης αυξάνει τη συνολική αντίσταση R_ολ. Λόγω του Νόμου του Ohm (I_ολ = V_ολ / R_ολ), με σταθερή τάση V_ολ, η ολική ένταση του ρεύματος ελαττώνεται."
+        }
+    ];
+
+    let currentMode = 'practice';
+    let currentQuestionIdx = 0;
+    let userAnswers = new Array(questionsData.length).fill(null);
+    let hintsUsed = new Array(questionsData.length).fill(false);
+
+    function selectMode(mode) {
+        currentMode = mode;
+        document.getElementById('mode-practice-card').classList.toggle('selected', mode === 'practice');
+        document.getElementById('mode-exam-card').classList.toggle('selected', mode === 'exam');
+    }
+
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        
+        userAnswers = new Array(questionsData.length).fill(null);
+        hintsUsed = new Array(questionsData.length).fill(false);
+        currentQuestionIdx = 0;
+
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+        document.getElementById('alert-msg').style.display = 'none';
+
+        if (currentMode === 'practice') {
+            document.getElementById('btn-prev').style.display = currentQuestionIdx > 0 ? 'inline-block' : 'none';
+            document.getElementById('btn-next').style.display = currentQuestionIdx < questionsData.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('btn-submit').style.display = currentQuestionIdx === questionsData.length - 1 ? 'inline-block' : 'none';
+            
+            updateProgressBar((currentQuestionIdx + 1) / questionsData.length * 100);
+
+            const q = questionsData[currentQuestionIdx];
+            container.appendChild(createQuestionCard(q, currentQuestionIdx, true));
+        } else {
+            document.getElementById('btn-prev').style.display = 'none';
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'inline-block';
+            
+            updateProgressBar(0);
+
+            questionsData.forEach((q, idx) => {
+                container.appendChild(createQuestionCard(q, idx, false));
+            });
+        }
+    }
+
+    function createQuestionCard(q, index, isPractice) {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `q-card-${index}`;
+
+        const header = document.createElement('div');
+        header.className = 'question-header';
+        header.innerHTML = `<span>Ερώτηση ${index + 1} από ${questionsData.length}</span>`;
+        card.appendChild(header);
+
+        const title = document.createElement('div');
+        title.className = 'question-title';
+        title.innerText = q.question;
+        card.appendChild(title);
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'options-list';
+
+        q.options.forEach((opt, optIdx) => {
+            const item = document.createElement('div');
+            item.className = 'option-item';
+            if (userAnswers[index] === optIdx) {
+                item.classList.add('selected');
+            }
+
+            if (isPractice && userAnswers[index] !== null) {
+                if (optIdx === q.correct) {
+                    item.classList.add('correct');
+                } else if (userAnswers[index] === optIdx) {
+                    item.classList.add('incorrect');
+                }
+            }
+
+            item.onclick = () => selectOption(index, optIdx, isPractice);
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = `q-${index}`;
+            radio.checked = userAnswers[index] === optIdx;
+
+            const label = document.createElement('span');
+            label.innerText = `${String.fromCharCode(65 + optIdx)}. ${opt}`;
+
+            item.appendChild(radio);
+            item.appendChild(label);
+            optionsList.appendChild(item);
+        });
+
+        card.appendChild(optionsList);
+
+        // Hint Button & Box
+        const hintBtn = document.createElement('button');
+        hintBtn.className = 'btn btn-hint';
+        hintBtn.innerText = '💡 Υπόδειξη';
+        hintBtn.onclick = () => toggleHint(index);
+        card.appendChild(hintBtn);
+
+        const hintBox = document.createElement('div');
+        hintBox.className = 'hint-box';
+        hintBox.id = `hint-box-${index}`;
+        hintBox.innerText = q.hint;
+        if (hintsUsed[index]) {
+            hintBox.style.display = 'block';
+        }
+        card.appendChild(hintBox);
+
+        // Justification Box (in Practice mode)
+        const justBox = document.createElement('div');
+        justBox.className = 'justification-box';
+        justBox.id = `just-box-${index}`;
+        justBox.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong><br>${q.justification}`;
+        if (isPractice && userAnswers[index] !== null) {
+            justBox.style.display = 'block';
+        }
+        card.appendChild(justBox);
+
+        return card;
+    }
+
+    function selectOption(qIdx, optIdx, isPractice) {
+        if (isPractice && userAnswers[qIdx] !== null) return;
+
+        userAnswers[qIdx] = optIdx;
+
+        if (isPractice) {
+            renderQuiz();
+        } else {
+            const card = document.getElementById(`q-card-${qIdx}`);
+            const items = card.querySelectorAll('.option-item');
+            items.forEach((item, idx) => {
+                item.classList.toggle('selected', idx === optIdx);
+                item.querySelector('input').checked = idx === optIdx;
+            });
+            updateExamProgress();
+        }
+    }
+
+    function toggleHint(qIdx) {
+        hintsUsed[qIdx] = !hintsUsed[qIdx];
+        const box = document.getElementById(`hint-box-${qIdx}`);
+        if (box) {
+            box.style.display = hintsUsed[qIdx] ? 'block' : 'none';
+        }
+    }
+
+    function updateProgressBar(percent) {
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function updateExamProgress() {
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        updateProgressBar((answeredCount / questionsData.length) * 100);
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIdx > 0) {
+            currentQuestionIdx--;
+            renderQuiz();
+        }
+    }
+
+    function nextQuestion() {
+        if (userAnswers[currentQuestionIdx] === null) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = 'Παρακαλώ επιλέξτε μια απάντηση πριν προχωρήσετε.';
+            alert.style.display = 'block';
+            return;
+        }
+        if (currentQuestionIdx < questionsData.length - 1) {
+            currentQuestionIdx++;
+            renderQuiz();
+        }
+    }
+
+    function submitQuiz() {
+        const unanswered = [];
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) unanswered.push(idx + 1);
+        });
+
+        if (unanswered.length > 0) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = `Παρακαλώ απαντήστε σε όλες τις ερωτήσεις πριν την υποβολή. Εκκρεμούν οι ερωτήσεις: ${unanswered.join(', ')}.`;
+            alert.style.display = 'block';
+            window.scrollTo({ top: alert.offsetTop - 20, behavior: 'smooth' });
+            return;
+        }
+
+        showReport();
+    }
+
+    function showReport() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('report-screen').style.display = 'block';
+
+        const nameInput = document.getElementById('student-name').value.trim();
+        const studentName = nameInput !== '' ? nameInput : 'Ανώνυμος/η Μαθητής/τρια';
+
+        let correctCount = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === questionsData[idx].correct) correctCount++;
+        });
+
+        const percentage = Math.round((correctCount / questionsData.length) * 100);
+        const now = new Date();
+        const dateTimeStr = now.toLocaleDateString('el-GR') + ' ' + now.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
+
+        document.getElementById('report-student-name').innerText = `Αναφορά Αποτελεσμάτων: ${studentName}`;
+        document.getElementById('report-meta-info').innerText = `Ημερομηνία: ${dateTimeStr} | Λειτουργία: ${currentMode === 'practice' ? 'Εκμάθηση' : 'Προσομοίωση'}`;
+        document.getElementById('report-score-display').innerText = `${correctCount} / ${questionsData.length} (${percentage}%)`;
+
+        let comment = '';
+        if (percentage >= 90) {
+            comment = '🌟 Άριστα! Πλήρης κατανόηση της συνδεσμολογίας αντιστατών σε σειρά και παράλληλα!';
+        } else if (percentage >= 75) {
+            comment = '👍 Πολύ καλά! Έχετε κατανοήσει τα περισσότερα σημεία της 11ης εβδομάδας.';
+        } else if (percentage >= 50) {
+            comment = '💡 Καλή προσπάθεια! Χρειάζεται μια μικρή επανάληψη στους υπολογισμούς παράλληλων αντιστάσεων και ρευμάτων κλάδων.';
+        } else {
+            comment = '📚 Χρειάζεται συστηματική μελέτη της θεωρίας και των παραδειγμάτων του Κεφαλαίου 2.5.';
+        }
+        document.getElementById('report-comment').innerText = comment;
+
+        const detailsContainer = document.getElementById('report-details-container');
+        detailsContainer.innerHTML = '';
+
+        questionsData.forEach((q, idx) => {
+            const isCorrect = userAnswers[idx] === q.correct;
+            const item = document.createElement('div');
+            item.className = `report-item ${isCorrect ? 'correct-item' : 'incorrect-item'}`;
+
+            const badge = document.createElement('span');
+            badge.className = `badge ${isCorrect ? 'badge-success' : 'badge-danger'}`;
+            badge.innerText = isCorrect ? '✓ ΣΩΣΤΟ' : '✗ ΛΑΘΟΣ';
+            item.appendChild(badge);
+
+            const qTitle = document.createElement('div');
+            qTitle.style.fontWeight = '600';
+            qTitle.style.marginBottom = '8px';
+            qTitle.innerText = `Ερώτηση ${idx + 1}: ${q.question}`;
+            item.appendChild(qTitle);
+
+            const userAnsDiv = document.createElement('div');
+            userAnsDiv.style.fontSize = '0.95rem';
+            userAnsDiv.innerHTML = `<strong>Η επιλογή σας:</strong> ${String.fromCharCode(65 + userAnswers[idx])}. ${q.options[userAnswers[idx]]}`;
+            userAnsDiv.style.color = isCorrect ? 'var(--correct-border)' : 'var(--incorrect-border)';
+            item.appendChild(userAnsDiv);
+
+            if (!isCorrect) {
+                const correctAnsDiv = document.createElement('div');
+                correctAnsDiv.style.fontSize = '0.95rem';
+                correctAnsDiv.style.color = 'var(--correct-border)';
+                correctAnsDiv.innerHTML = `<strong>Σωστή απάντηση:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}`;
+                item.appendChild(correctAnsDiv);
+            }
+
+            const justDiv = document.createElement('div');
+            justDiv.className = 'justification-box';
+            justDiv.style.display = 'block';
+            justDiv.style.marginTop = '10px';
+            justDiv.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong> ${q.justification}`;
+            item.appendChild(justDiv);
+
+            detailsContainer.appendChild(item);
+        });
+    }
+
+    function restartQuiz() {
+        document.getElementById('report-screen').style.display = 'none';
+        document.getElementById('start-screen').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

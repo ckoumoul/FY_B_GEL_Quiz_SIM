@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φυσική Β΄ ΓΕΛ - 21η Εβδομάδα: Ατομικά Φαινόμενα & Διακριτές Ενεργειακές Στάθμες</title>
+    <style>
+        :root {
+            --bg-color: #f7f4ef;
+            --text-color: #3a322b;
+            --primary-terracotta: #7a4b29;
+            --primary-hover: #633b1f;
+            --secondary-olive: #4e6e52;
+            --secondary-hover: #3d5740;
+            --accent-ochre: #d4b886;
+            --card-bg: #ffffff;
+            --border-color: #e2dacd;
+            --correct-bg: #eaf2eb;
+            --correct-border: #4e6e52;
+            --incorrect-bg: #fbeaea;
+            --incorrect-border: #a83b3b;
+            --hint-bg: #fdf8ec;
+            --hint-border: #d4b886;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(58, 50, 43, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--primary-terracotta);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        header h2 {
+            color: var(--secondary-olive);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #fcfbfa;
+            color: var(--text-color);
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-terracotta);
+        }
+
+        .mode-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mode-card {
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            background-color: #fdfcfb;
+        }
+
+        .mode-card:hover {
+            border-color: var(--primary-terracotta);
+            transform: translateY(-2px);
+        }
+
+        .mode-card.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .mode-card h3 {
+            color: var(--primary-terracotta);
+            margin-bottom: 8px;
+        }
+
+        .mode-card p {
+            font-size: 0.9rem;
+            color: #665a50;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-terracotta);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-olive);
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .btn-hint {
+            background-color: transparent;
+            color: var(--primary-terracotta);
+            border: 1px dashed var(--primary-terracotta);
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        .btn-hint:hover {
+            background-color: #f7ede5;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary-olive);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--secondary-olive);
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #fcfbfa;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-ochre);
+            background-color: #fbf8f3;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .option-item.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            color: #1e3b23;
+        }
+
+        .option-item.incorrect {
+            border-color: var(--incorrect-border);
+            background-color: var(--incorrect-bg);
+            color: #5c1919;
+        }
+
+        .option-item input {
+            margin-right: 12px;
+            accent-color: var(--primary-terracotta);
+        }
+
+        .hint-box {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 16px;
+            background-color: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #594833;
+        }
+
+        .justification-box {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background-color: var(--correct-bg);
+            border-left: 4px solid var(--correct-border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #1e3b23;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .report-header {
+            background-color: #f7ede5;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .report-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-terracotta);
+            margin: 10px 0;
+        }
+
+        .report-meta {
+            font-size: 0.95rem;
+            color: #5c5046;
+            margin-bottom: 12px;
+        }
+
+        .pedagogical-comment {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--secondary-olive);
+            padding: 12px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+        }
+
+        .report-item {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .report-item.correct-item {
+            border-left: 6px solid var(--correct-border);
+        }
+
+        .report-item.incorrect-item {
+            border-left: 6px solid var(--incorrect-border);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .badge-success {
+            background-color: var(--correct-bg);
+            color: var(--correct-border);
+        }
+
+        .badge-danger {
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .alert-box {
+            padding: 12px 16px;
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+            border: 1px solid var(--incorrect-border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            .report-actions, .quiz-footer, header p {
+                display: none !important;
+            }
+            .report-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Φυσική Β΄ ΓΕΛ (Γενικής Παιδείας)</h1>
+        <h2>21η Εβδομάδα: Κεφάλαιο 4.1 – Ενέργεια του Ηλεκτρονίου στο Άτομο του Υδρογόνου & 4.2 – Διακριτές Ενεργειακές Στάθμες</h2>
+    </header>
+
+    <!-- ΑΡΧΙΚΗ ΟΘΟΝΗ -->
+    <div id="start-screen">
+        <div class="form-group">
+            <label for="student-name">Ονοματεπώνυμο Μαθητή/τριας (Προαιρετικό):</label>
+            <input type="text" id="student-name" placeholder="Π.χ. Κωνσταντίνος Κουμουλίδης">
+        </div>
+
+        <div class="form-group">
+            <label>Επιλέξτε Λειτουργία Quiz:</label>
+            <div class="mode-selection">
+                <div class="mode-card selected" id="mode-practice-card" onclick="selectMode('practice')">
+                    <h3>🎮 Εκμάθηση & Εξάσκησή</h3>
+                    <p>Βήμα-βήμα υποβολή με άμεση ανατροφοδότηση, υπόδειξη και αιτιολογία σε κάθε ερώτηση.</p>
+                </div>
+                <div class="mode-card" id="mode-exam-card" onclick="selectMode('exam')">
+                    <h3>📝 Προσομοίωση & Τεστ</h3>
+                    <p>Συγκεντρωτική εμφάνιση όλων των ερωτήσεων. Υποβολή στο τέλος με αναλυτικό Report.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-primary" onclick="startQuiz()" style="font-size: 1.1rem; padding: 14px 40px;">Έναρξη Quiz</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ QUIZ -->
+    <div id="quiz-screen" style="display: none;">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div id="alert-msg" class="alert-box"></div>
+
+        <div id="questions-container"></div>
+
+        <div class="quiz-footer">
+            <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()" style="display: none;">← Προηγούμενη</button>
+            <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Επόμενη →</button>
+            <button class="btn btn-primary" id="btn-submit" onclick="submitQuiz()" style="display: none;">Ολοκλήρωση & Υποβολή</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ REPORT -->
+    <div id="report-screen" style="display: none;">
+        <div class="report-header">
+            <h2 id="report-student-name" style="color: var(--primary-terracotta);">Αναφορά Αποτελεσμάτων</h2>
+            <div class="report-meta" id="report-meta-info"></div>
+            <div class="report-score" id="report-score-display">0 / 0</div>
+            <div class="pedagogical-comment" id="report-comment"></div>
+        </div>
+
+        <h3 style="margin-bottom: 20px; color: var(--primary-terracotta);">Αναλυτική Επισκόπηση Ερωτήσεων</h3>
+        <div id="report-details-container"></div>
+
+        <div class="report-actions">
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Εκτύπωση / Αποθήκευση σε PDF</button>
+            <button class="btn btn-primary" onclick="restartQuiz()">↻ Έναρξη από την αρχή</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questionsData = [
+        {
+            id: 1,
+            question: "Σύμφωνα με το ημικλασικό ατομικό πρότυπο του Bohr για το άτομο του υδρογόνου, ποιες τροχιές επιτρέπεται να εκτελεί το ηλεκτρόνιο γύρω από το πρωτόνιο;",
+            options: [
+                "Οποιαδήποτε κυκλική τροχιά τυχαίας ακτίνας r",
+                "Μόνο ορισμένες καθορισμένες διακριτές κυκλικές τροχιές, στις οποίες η ακτίνα r_n εξαρτάται από τον κύριο κβαντικό αριθμό n (n = 1, 2, 3...)",
+                "Μόνο ελλειπτικές τροχιές που μεταβάλλονται συνεχώς",
+                "Τροχιές στις οποίες η ταχύτητα του ηλεκτρονίου είναι πάντα μηδέν"
+            ],
+            correct: 1,
+            hint: "Ο Bohr εισήγαγε την έννοια της κβάντωσης των τροχιών στον μικρόκοσμο.",
+            justification: "Σύμφωνα με τις παραδοχές του Bohr, το ηλεκτρόνιο στο άτομο του υδρογόνου μπορεί να περιφέρεται μόνο σε ορισμένες καθορισμένες κυκλικές τροχιές (επιτρεπόμενες τροχιές), όπου η ακτίνα r_n είναι κβαντισμένη."
+        },
+        {
+            id: 2,
+            question: "Πώς υπολογίζεται η ακτίνα r_n της n-οστής επιτρεπόμενης τροχιάς στο άτομο του υδρογόνου συναρτήσει της ακτίνας της πρώτης τροχιάς r1 (r1 = 5.3 · 10^-11 m);",
+            options: [
+                "r_n = n · r1",
+                "r_n = n² · r1",
+                "r_n = r1 / n",
+                "r_n = r1 / n²"
+            ],
+            correct: 1,
+            hint: "Η ακτίνα των επιτρεπόμενων τροχιών αυξάνεται ανάλογα με το τετράγωνο του κύριου κβαντικού αριθμού n.",
+            justification: "Ο τύπος υπολογισμού της ακτίνας της n-οστής τροχιάς είναι r_n = n² · r1. Για παράδειγμα, για n = 2, r2 = 2² · r1 = 4 · r1."
+        },
+        {
+            id: 3,
+            question: "Ποια είναι η ακτίνα r2 της 2ης επιτρεπόμενης τροχιάς του ηλεκτρονίου στο άτομο του υδρογόνου (δίνεται r1 = 5.3 · 10^-11 m);",
+            options: [
+                "10.6 · 10^-11 m",
+                "21.2 · 10^-11 m (ή 2.12 · 10^-10 m)",
+                "47.7 · 10^-11 m",
+                "2.65 · 10^-11 m"
+            ],
+            correct: 1,
+            hint: "Εφαρμόστε τον τύπο r2 = 2² · r1 = 4 · r1.",
+            justification: "r2 = 2² · r1 = 4 · (5.3 · 10^-11 m) = 21.2 · 10^-11 m = 2.12 · 10^-10 m."
+        },
+        {
+            id: 4,
+            question: "Ποια είναι η σχέση μεταξύ της Κινητικής Ενέργειας K_n, της Δυναμικής Ενέργειας U_n και της Ολικής Μηχανικής Ενέργειας E_n του ηλεκτρονίου στην n-οστή τροχιά;",
+            options: [
+                "K_n = |U_n|  και  E_n = +K_n",
+                "K_n = (1/2) · |U_n|  και  E_n = -K_n = (1/2) · U_n",
+                "K_n = 2 · |U_n|  και  E_n = U_n",
+                "E_n = K_n + U_n = 0"
+            ],
+            correct: 1,
+            hint: "Η δυναμική ενέργεια είναι αρνητική (U_n < 0) λόγω ελκτικής δύναμης Coulomb και έχει διπλάσιο μέτρο από την κινητική ενέργεια K_n.",
+            justification: "Στο μοντέλο του Bohr ισχύουν οι σχέσεις K_n = (1/2) · |U_n| και E_n = K_n + U_n = -K_n = (1/2) · U_n. Επειδή το σύστημα είναι δέσμιο, η ολική ενέργεια E_n είναι αρνητική."
+        },
+        {
+            id: 5,
+            question: "Πώς ορίζεται η μονάδα μέτρησης ενέργειας στον μικρόκοσμο 'Electron-volt' (1 eV) και ποια είναι η ισοδυναμία της σε Joules (J);",
+            options: [
+                "1 eV = 1 J",
+                "1 eV = 1.6 · 10^-19 J (η κινητική ενέργεια που αποκτά ηλεκτρόνιο όταν επιταχυνθεί από διαφορά δυναμικού 1 Volt)",
+                "1 eV = 9 · 10^9 J",
+                "1 eV = 6.63 · 10^-34 J"
+            ],
+            correct: 1,
+            hint: "W = q · V = e · 1 V = (1.6 · 10^-19 C) · (1 V).",
+            justification: "1 eV ορίζεται ως η ενέργεια που αποκτά ένα ηλεκτρόνιο όταν μετακινηθεί μεταξύ δύο σημείων με διαφορά δυναμικού 1 Volt. Ισχύει 1 eV = 1.6 · 10^-19 Joules."
+        },
+        {
+            id: 6,
+            question: "Ποιος είναι ο μαθηματικός τύπος υπολογισμού των διακριτών ενεργειακών σταθμών E_n του ατόμου του υδρογόνου (όπου E1 = -13.6 eV η ενέργεια της θεμελιώδους στάθμης);",
+            options: [
+                "E_n = E1 · n²",
+                "E_n = E1 / n²",
+                "E_n = E1 / n",
+                "E_n = E1 · n"
+            ],
+            correct: 1,
+            hint: "Όσο αυξάνεται ο κύριος κβαντικός αριθμός n, η ενέργεια E_n αυξάνεται (γίνεται λιγότερο αρνητική, πλησιάζοντας το μηδέν).",
+            justification: "Οι διακριτές ενεργειακές στάθμες υπολογίζονται από τον τύπο E_n = E1 / n², όπου E1 = -13.6 eV."
+        },
+        {
+            id: 7,
+            question: "Πόση είναι η ολική ενέργεια E2 του ηλεκτρονίου στην 1η διεγερμένη κατάσταση (n = 2) του ατόμου του υδρογόνου;",
+            options: [
+                "-13.6 eV",
+                "-3.4 eV",
+                "-1.51 eV",
+                "-6.8 eV"
+            ],
+            correct: 1,
+            hint: "Εφαρμόστε τον τύπο E2 = E1 / 2² = -13.6 eV / 4.",
+            justification: "E2 = E1 / 2² = -13.6 eV / 4 = -3.4 eV."
+        },
+        {
+            id: 8,
+            question: "Τι ονομάζεται 'Θεμελιώδης Κατάσταση' ενός ατόμου υδρογόνου;",
+            options: [
+                "Η κατάσταση στην οποία το ηλεκτρόνιο βρίσκεται στην τροχιά με n = 1 και έχει τη χαμηλότερη δυνατή ενέργεια (E1 = -13.6 eV)",
+                "Η κατάσταση στην οποία το ηλεκτρόνιο έχει ιοντιστεί (n -> άπειρο)",
+                "Η κατάσταση με n = 2",
+                "Η κατάσταση στην οποία η ενέργεια είναι θετική"
+            ],
+            correct: 0,
+            hint: "Είναι η σταθερότερη κατάσταση του ατόμου στη χαμηλότερη ενεργειακή βαθμίδα.",
+            justification: "Θεμελιώδης κατάσταση ονομάζεται η κατάσταση ελάχιστης ενέργειας του ατόμου (n = 1, E1 = -13.6 eV), στην οποία το άτομο είναι απόλυτα σταθερό."
+        },
+        {
+            id: 9,
+            question: "Ποιες ονομάζονται 'Διεγερμένες Καταστάσεις' του ατόμου του υδρογόνου;",
+            options: [
+                "Όλες οι καταστάσεις στις οποίες το ηλεκτρόνιο περιφέρεται σε τροχιές με n >= 2 (n = 2, 3, 4, ...) με ενέργειες μεγαλύτερες της E1",
+                "Μόνο η κατάσταση n = 1",
+                "Οι καταστάσεις στις οποίες το άτομο έχει μηδενικό φορτίο",
+                "Οι καταστάσεις στις οποίες το ηλεκτρόνιο βρίσκεται εκτός ατόμου"
+            ],
+            correct: 0,
+            hint: "Όταν το άτομο απορροφήσει ενέργεια, το ηλεκτρόνιο μεταβαίνει σε ανώτερες τροχιές με n > 1.",
+            justification: "Διεγερμένες καταστάσεις ονομάζονται οι ενεργειακές στάθμες με n = 2, 3, 4,... (E2 = -3.4 eV, E3 = -1.51 eV κ.λπ.), στις οποίες το άτομο έχει προσλάβει ενέργεια."
+        },
+        {
+            id: 10,
+            question: "Τι συμβαίνει κατά τον 'Ιοντισμό' του ατόμου του υδρογόνου;",
+            options: [
+                "Το ηλεκτρόνιο μεταβαίνει από την τροχιά n = 1 στην τροχιά n = 2",
+                "Προσφέρεται η κατάλληλη ενέργεια ώστε το ηλεκτρόνιο να απομακρυνθεί πλήρως από την έλξη του πυρήνα (n -> άπειρο, E_άπειρο = 0 eV)",
+                "Το ηλεκτρόνιο πέφτει πάνω στον πυρήνα",
+                "Η ενέργεια του ατόμου γίνεται -27.2 eV"
+            ],
+            correct: 1,
+            hint: "Στον ιοντισμό το ηλεκτρόνιο απελευθερώνεται εντελώς από το άτομο (r -> ∞).",
+            justification: "Ιοντισμός είναι η διαδικασία πλήρους απομάκρυνσης του ηλεκτρoνίου από το άτομο (n -> ∞). Στην κατάσταση αυτή η ενέργεια αλληλεπίδρασης μηδενίζεται (E_∞ = 0 eV)."
+        },
+        {
+            id: 11,
+            question: "Πόση είναι η 'Ενέργεια Ιοντισμού' E_ion του ατόμου του υδρογόνου όταν αυτό βρίσκεται αρχικά στη Θεμελιώδη Κατάσταση (n = 1);",
+            options: [
+                "E_ion = +13.6 eV (ή 2.176 · 10^-18 J)",
+                "E_ion = -13.6 eV",
+                "E_ion = +3.4 eV",
+                "E_ion = 0 eV"
+            ],
+            correct: 0,
+            hint: "E_ion = E_άπειρο - E1 = 0 - (-13.6 eV).",
+            justification: "Η ελάχιστη ενέργεια ιοντισμού από τη θεμελιώδη κατάσταση είναι E_ion = E_∞ - E1 = 0 - (-13.6 eV) = +13.6 eV."
+        },
+        {
+            id: 12,
+            question: "Πόση είναι η ενέργεια ιοντισμού E_ion,2 του ατόμου του υδρογόνου όταν αυτό βρίσκεται στην 1η διεγερμένη κατάσταση (n = 2, E2 = -3.4 eV);",
+            options: [
+                "+13.6 eV",
+                "+3.4 eV",
+                "+1.51 eV",
+                "+6.8 eV"
+            ],
+            correct: 1,
+            hint: "E_ion,2 = E_άπειρο - E2 = 0 - (-3.4 eV).",
+            justification: "Η ενέργεια ιοντισμού από τη στάθμη n = 2 είναι E_ion,2 = E_∞ - E2 = 0 - (-3.4 eV) = +3.4 eV."
+        },
+        {
+            id: 13,
+            question: "Γιατί οι τιμές της ολικής ενέργειας E_n του ηλεκτρονίου στις επιτρεπόμενες τροχιές του ατόμου του υδρογόνου είναι ΑΡΝΗΤΙΚΕΣ (E_n < 0);",
+            options: [
+                "Επειδή το ηλεκτρόνιο έχει αρνητικό φορτίο",
+                "Επειδή το σύστημα ηλεκτρονίου-πρωτονίου είναι συγκρατούμενο (δέσμιο) λόγω της ελκτικής δύναμης Coulomb και απαιτείται προσφορά ενέργειας για τη διάσπασή του",
+                "Επειδή η κινητική ενέργεια είναι αρνητική",
+                "Επειδή ο κβαντικός αριθμός n είναι αρνητικός"
+            ],
+            correct: 1,
+            hint: "Με σημείο αναφοράς U=0 στο άπειρο, κάθε συγκρατούμενο σύστημα έχει ολική ενέργεια μικρότερη του μηδενός.",
+            justification: "Το αρνητικό πρόσημο της ενέργειας (E_n < 0) δηλώνει ότι το ηλεκτρόνιο είναι δέσμιο του πυρήνα. Για να ελευθερωθεί (E=0 στο άπειρο), πρέπει να του προσφερθεί ενέργεια."
+        },
+        {
+            id: 14,
+            question: "Πόση είναι η ολική ενέργεια E3 της 2ης διεγερμένης κατάστασης (n = 3) του ατόμου του υδρογόνου σε eV;",
+            options: [
+                "-1.51 eV",
+                "-4.53 eV",
+                "-3.4 eV",
+                "-0.85 eV"
+            ],
+            correct: 0,
+            hint: "E3 = E1 / 3² = -13.6 / 9.",
+            justification: "E3 = E1 / 3² = -13.6 eV / 9 = -1.51 eV."
+        },
+        {
+            id: 15,
+            question: "Ποια ψηφιακά μαθησιακά αντικείμενα/προσομοιώσεις αναφέρονται στο πλάνο της 21ης εβδομάδας για την οπτικοποίηση των κβαντισμένων τροχιών και των ενεργειακών σταθμών του Bohr;",
+            options: [
+                "Ψηφιακή προσομοίωση PhET 'Models of the Hydrogen Atom' & ψηφιακό υλικό Φωτόδενδρο 'Ενεργειακές στάθμες ατόμου υδρογόνου'",
+                "PhET 'Circuit Construction Kit'",
+                "PhET 'Bending Light'",
+                "PhET 'Faraday's Law'"
+            ],
+            correct: 0,
+            hint: "Πρόκειται για τα διαδραστικά εργαλεία μελέτης των ατομικών μοντέλων και των ενεργειακών σταθμών του υδρογόνου.",
+            justification: "Στο εγκεκριμένο πλάνο της 21ης εβδομάδας προτείνονται η προσομοίωση PhET 'Models of the Hydrogen Atom' (Μοντέλα του Ατόμου του Υδρογόνου) και το μαθησιακό αντικείμενο του Φωτόδενδρου 'Ενεργειακές στάθμες ατόμου υδρογόνου'."
+        }
+    ];
+
+    let currentMode = 'practice';
+    let currentQuestionIdx = 0;
+    let userAnswers = new Array(questionsData.length).fill(null);
+    let hintsUsed = new Array(questionsData.length).fill(false);
+
+    function selectMode(mode) {
+        currentMode = mode;
+        document.getElementById('mode-practice-card').classList.toggle('selected', mode === 'practice');
+        document.getElementById('mode-exam-card').classList.toggle('selected', mode === 'exam');
+    }
+
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        
+        userAnswers = new Array(questionsData.length).fill(null);
+        hintsUsed = new Array(questionsData.length).fill(false);
+        currentQuestionIdx = 0;
+
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+        document.getElementById('alert-msg').style.display = 'none';
+
+        if (currentMode === 'practice') {
+            document.getElementById('btn-prev').style.display = currentQuestionIdx > 0 ? 'inline-block' : 'none';
+            document.getElementById('btn-next').style.display = currentQuestionIdx < questionsData.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('btn-submit').style.display = currentQuestionIdx === questionsData.length - 1 ? 'inline-block' : 'none';
+            
+            updateProgressBar((currentQuestionIdx + 1) / questionsData.length * 100);
+
+            const q = questionsData[currentQuestionIdx];
+            container.appendChild(createQuestionCard(q, currentQuestionIdx, true));
+        } else {
+            document.getElementById('btn-prev').style.display = 'none';
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'inline-block';
+            
+            updateProgressBar(0);
+
+            questionsData.forEach((q, idx) => {
+                container.appendChild(createQuestionCard(q, idx, false));
+            });
+        }
+    }
+
+    function createQuestionCard(q, index, isPractice) {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `q-card-${index}`;
+
+        const header = document.createElement('div');
+        header.className = 'question-header';
+        header.innerHTML = `<span>Ερώτηση ${index + 1} από ${questionsData.length}</span>`;
+        card.appendChild(header);
+
+        const title = document.createElement('div');
+        title.className = 'question-title';
+        title.innerText = q.question;
+        card.appendChild(title);
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'options-list';
+
+        q.options.forEach((opt, optIdx) => {
+            const item = document.createElement('div');
+            item.className = 'option-item';
+            if (userAnswers[index] === optIdx) {
+                item.classList.add('selected');
+            }
+
+            if (isPractice && userAnswers[index] !== null) {
+                if (optIdx === q.correct) {
+                    item.classList.add('correct');
+                } else if (userAnswers[index] === optIdx) {
+                    item.classList.add('incorrect');
+                }
+            }
+
+            item.onclick = () => selectOption(index, optIdx, isPractice);
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = `q-${index}`;
+            radio.checked = userAnswers[index] === optIdx;
+
+            const label = document.createElement('span');
+            label.innerText = `${String.fromCharCode(65 + optIdx)}. ${opt}`;
+
+            item.appendChild(radio);
+            item.appendChild(label);
+            optionsList.appendChild(item);
+        });
+
+        card.appendChild(optionsList);
+
+        // Hint Button & Box
+        const hintBtn = document.createElement('button');
+        hintBtn.className = 'btn btn-hint';
+        hintBtn.innerText = '💡 Υπόδειξη';
+        hintBtn.onclick = () => toggleHint(index);
+        card.appendChild(hintBtn);
+
+        const hintBox = document.createElement('div');
+        hintBox.className = 'hint-box';
+        hintBox.id = `hint-box-${index}`;
+        hintBox.innerText = q.hint;
+        if (hintsUsed[index]) {
+            hintBox.style.display = 'block';
+        }
+        card.appendChild(hintBox);
+
+        // Justification Box (in Practice mode)
+        const justBox = document.createElement('div');
+        justBox.className = 'justification-box';
+        justBox.id = `just-box-${index}`;
+        justBox.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong><br>${q.justification}`;
+        if (isPractice && userAnswers[index] !== null) {
+            justBox.style.display = 'block';
+        }
+        card.appendChild(justBox);
+
+        return card;
+    }
+
+    function selectOption(qIdx, optIdx, isPractice) {
+        if (isPractice && userAnswers[qIdx] !== null) return;
+
+        userAnswers[qIdx] = optIdx;
+
+        if (isPractice) {
+            renderQuiz();
+        } else {
+            const card = document.getElementById(`q-card-${qIdx}`);
+            const items = card.querySelectorAll('.option-item');
+            items.forEach((item, idx) => {
+                item.classList.toggle('selected', idx === optIdx);
+                item.querySelector('input').checked = idx === optIdx;
+            });
+            updateExamProgress();
+        }
+    }
+
+    function toggleHint(qIdx) {
+        hintsUsed[qIdx] = !hintsUsed[qIdx];
+        const box = document.getElementById(`hint-box-${qIdx}`);
+        if (box) {
+            box.style.display = hintsUsed[qIdx] ? 'block' : 'none';
+        }
+    }
+
+    function updateProgressBar(percent) {
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function updateExamProgress() {
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        updateProgressBar((answeredCount / questionsData.length) * 100);
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIdx > 0) {
+            currentQuestionIdx--;
+            renderQuiz();
+        }
+    }
+
+    function nextQuestion() {
+        if (userAnswers[currentQuestionIdx] === null) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = 'Παρακαλώ επιλέξτε μια απάντηση πριν προχωρήσετε.';
+            alert.style.display = 'block';
+            return;
+        }
+        if (currentQuestionIdx < questionsData.length - 1) {
+            currentQuestionIdx++;
+            renderQuiz();
+        }
+    }
+
+    function submitQuiz() {
+        const unanswered = [];
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) unanswered.push(idx + 1);
+        });
+
+        if (unanswered.length > 0) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = `Παρακαλώ απαντήστε σε όλες τις ερωτήσεις πριν την υποβολή. Εκκρεμούν οι ερωτήσεις: ${unanswered.join(', ')}.`;
+            alert.style.display = 'block';
+            window.scrollTo({ top: alert.offsetTop - 20, behavior: 'smooth' });
+            return;
+        }
+
+        showReport();
+    }
+
+    function showReport() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('report-screen').style.display = 'block';
+
+        const nameInput = document.getElementById('student-name').value.trim();
+        const studentName = nameInput !== '' ? nameInput : 'Ανώνυμος/η Μαθητής/τρια';
+
+        let correctCount = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === questionsData[idx].correct) correctCount++;
+        });
+
+        const percentage = Math.round((correctCount / questionsData.length) * 100);
+        const now = new Date();
+        const dateTimeStr = now.toLocaleDateString('el-GR') + ' ' + now.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
+
+        document.getElementById('report-student-name').innerText = `Αναφορά Αποτελεσμάτων: ${studentName}`;
+        document.getElementById('report-meta-info').innerText = `Ημερομηνία: ${dateTimeStr} | Λειτουργία: ${currentMode === 'practice' ? 'Εκμάθηση' : 'Προσομοίωση'}`;
+        document.getElementById('report-score-display').innerText = `${correctCount} / ${questionsData.length} (${percentage}%)`;
+
+        let comment = '';
+        if (percentage >= 90) {
+            comment = '🌟 Άριστα! Πλήρης κατανόηση του ατομικού προτύπου του Bohr, των διακριτών ενεργειακών σταθμών E_n = E1/n² και του ιοντισμού!';
+        } else if (percentage >= 75) {
+            comment = '👍 Πολύ καλά! Έχετε κατανοήσει τα περισσότερα σημεία της 21ης εβδομάδας.';
+        } else if (percentage >= 50) {
+            comment = '💡 Καλή προσπάθεια! Χρειάζεται μια μικρή επανάληψη στους υπολογισμούς ακτίνων r_n = n²·r1, ενεργειών E_n και ενέργειας ιοντισμού.';
+        } else {
+            comment = '📚 Χρειάζεται συστηματική μελέτη της θεωρίας και των παραδειγμάτων των Κεφαλαίων 4.1 & 4.2.';
+        }
+        document.getElementById('report-comment').innerText = comment;
+
+        const detailsContainer = document.getElementById('report-details-container');
+        detailsContainer.innerHTML = '';
+
+        questionsData.forEach((q, idx) => {
+            const isCorrect = userAnswers[idx] === q.correct;
+            const item = document.createElement('div');
+            item.className = `report-item ${isCorrect ? 'correct-item' : 'incorrect-item'}`;
+
+            const badge = document.createElement('span');
+            badge.className = `badge ${isCorrect ? 'badge-success' : 'badge-danger'}`;
+            badge.innerText = isCorrect ? '✓ ΣΩΣΤΟ' : '✗ ΛΑΘΟΣ';
+            item.appendChild(badge);
+
+            const qTitle = document.createElement('div');
+            qTitle.style.fontWeight = '600';
+            qTitle.style.marginBottom = '8px';
+            qTitle.innerText = `Ερώτηση ${idx + 1}: ${q.question}`;
+            item.appendChild(qTitle);
+
+            const userAnsDiv = document.createElement('div');
+            userAnsDiv.style.fontSize = '0.95rem';
+            userAnsDiv.innerHTML = `<strong>Η επιλογή σας:</strong> ${String.fromCharCode(65 + userAnswers[idx])}. ${q.options[userAnswers[idx]]}`;
+            userAnsDiv.style.color = isCorrect ? 'var(--correct-border)' : 'var(--incorrect-border)';
+            item.appendChild(userAnsDiv);
+
+            if (!isCorrect) {
+                const correctAnsDiv = document.createElement('div');
+                correctAnsDiv.style.fontSize = '0.95rem';
+                correctAnsDiv.style.color = 'var(--correct-border)';
+                correctAnsDiv.innerHTML = `<strong>Σωστή απάντηση:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}`;
+                item.appendChild(correctAnsDiv);
+            }
+
+            const justDiv = document.createElement('div');
+            justDiv.className = 'justification-box';
+            justDiv.style.display = 'block';
+            justDiv.style.marginTop = '10px';
+            justDiv.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong> ${q.justification}`;
+            item.appendChild(justDiv);
+
+            detailsContainer.appendChild(item);
+        });
+    }
+
+    function restartQuiz() {
+        document.getElementById('report-screen').style.display = 'none';
+        document.getElementById('start-screen').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

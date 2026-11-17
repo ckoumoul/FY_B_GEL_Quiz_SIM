@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φυσική Β΄ ΓΕΛ - 18η Εβδομάδα: Ανακεφαλαίωση & Εμπεδωτική Αξιολόγηση 2ου Κεφαλαίου</title>
+    <style>
+        :root {
+            --bg-color: #f7f4ef;
+            --text-color: #3a322b;
+            --primary-terracotta: #7a4b29;
+            --primary-hover: #633b1f;
+            --secondary-olive: #4e6e52;
+            --secondary-hover: #3d5740;
+            --accent-ochre: #d4b886;
+            --card-bg: #ffffff;
+            --border-color: #e2dacd;
+            --correct-bg: #eaf2eb;
+            --correct-border: #4e6e52;
+            --incorrect-bg: #fbeaea;
+            --incorrect-border: #a83b3b;
+            --hint-bg: #fdf8ec;
+            --hint-border: #d4b886;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(58, 50, 43, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--primary-terracotta);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        header h2 {
+            color: var(--secondary-olive);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #fcfbfa;
+            color: var(--text-color);
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-terracotta);
+        }
+
+        .mode-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mode-card {
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            background-color: #fdfcfb;
+        }
+
+        .mode-card:hover {
+            border-color: var(--primary-terracotta);
+            transform: translateY(-2px);
+        }
+
+        .mode-card.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .mode-card h3 {
+            color: var(--primary-terracotta);
+            margin-bottom: 8px;
+        }
+
+        .mode-card p {
+            font-size: 0.9rem;
+            color: #665a50;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-terracotta);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-olive);
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .btn-hint {
+            background-color: transparent;
+            color: var(--primary-terracotta);
+            border: 1px dashed var(--primary-terracotta);
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        .btn-hint:hover {
+            background-color: #f7ede5;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary-olive);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--secondary-olive);
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #fcfbfa;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-ochre);
+            background-color: #fbf8f3;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .option-item.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            color: #1e3b23;
+        }
+
+        .option-item.incorrect {
+            border-color: var(--incorrect-border);
+            background-color: var(--incorrect-bg);
+            color: #5c1919;
+        }
+
+        .option-item input {
+            margin-right: 12px;
+            accent-color: var(--primary-terracotta);
+        }
+
+        .hint-box {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 16px;
+            background-color: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #594833;
+        }
+
+        .justification-box {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background-color: var(--correct-bg);
+            border-left: 4px solid var(--correct-border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #1e3b23;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .report-header {
+            background-color: #f7ede5;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .report-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-terracotta);
+            margin: 10px 0;
+        }
+
+        .report-meta {
+            font-size: 0.95rem;
+            color: #5c5046;
+            margin-bottom: 12px;
+        }
+
+        .pedagogical-comment {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--secondary-olive);
+            padding: 12px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+        }
+
+        .report-item {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .report-item.correct-item {
+            border-left: 6px solid var(--correct-border);
+        }
+
+        .report-item.incorrect-item {
+            border-left: 6px solid var(--incorrect-border);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .badge-success {
+            background-color: var(--correct-bg);
+            color: var(--correct-border);
+        }
+
+        .badge-danger {
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .alert-box {
+            padding: 12px 16px;
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+            border: 1px solid var(--incorrect-border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            .report-actions, .quiz-footer, header p {
+                display: none !important;
+            }
+            .report-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Φυσική Β΄ ΓΕΛ (Γενικής Παιδείας)</h1>
+        <h2>18η Εβδομάδα: Ανακεφαλαίωση & Εμπεδωτική Αξιολόγηση 2ου Κεφαλαίου (Συνεχές Ηλεκτρικό Ρεύμα)</h2>
+    </header>
+
+    <!-- ΑΡΧΙΚΗ ΟΘΟΝΗ -->
+    <div id="start-screen">
+        <div class="form-group">
+            <label for="student-name">Ονοματεπώνυμο Μαθητή/τριας (Προαιρετικό):</label>
+            <input type="text" id="student-name" placeholder="Π.χ. Κωνσταντίνος Κουμουλίδης">
+        </div>
+
+        <div class="form-group">
+            <label>Επιλέξτε Λειτουργία Quiz:</label>
+            <div class="mode-selection">
+                <div class="mode-card selected" id="mode-practice-card" onclick="selectMode('practice')">
+                    <h3>🎮 Εκμάθηση & Εξάσκησή</h3>
+                    <p>Βήμα-βήμα υποβολή με άμεση ανατροφοδότηση, υπόδειξη και αιτιολογία σε κάθε ερώτηση.</p>
+                </div>
+                <div class="mode-card" id="mode-exam-card" onclick="selectMode('exam')">
+                    <h3>📝 Προσομοίωση & Τεστ</h3>
+                    <p>Συγκεντρωτική εμφάνιση όλων των ερωτήσεων. Υποβολή στο τέλος με αναλυτικό Report.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-primary" onclick="startQuiz()" style="font-size: 1.1rem; padding: 14px 40px;">Έναρξη Quiz</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ QUIZ -->
+    <div id="quiz-screen" style="display: none;">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div id="alert-msg" class="alert-box"></div>
+
+        <div id="questions-container"></div>
+
+        <div class="quiz-footer">
+            <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()" style="display: none;">← Προηγούμενη</button>
+            <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Επόμενη →</button>
+            <button class="btn btn-primary" id="btn-submit" onclick="submitQuiz()" style="display: none;">Ολοκλήρωση & Υποβολή</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ REPORT -->
+    <div id="report-screen" style="display: none;">
+        <div class="report-header">
+            <h2 id="report-student-name" style="color: var(--primary-terracotta);">Αναφορά Αποτελεσμάτων</h2>
+            <div class="report-meta" id="report-meta-info"></div>
+            <div class="report-score" id="report-score-display">0 / 0</div>
+            <div class="pedagogical-comment" id="report-comment"></div>
+        </div>
+
+        <h3 style="margin-bottom: 20px; color: var(--primary-terracotta);">Αναλυτική Επισκόπηση Ερωτήσεων</h3>
+        <div id="report-details-container"></div>
+
+        <div class="report-actions">
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Εκτύπωση / Αποθήκευση σε PDF</button>
+            <button class="btn btn-primary" onclick="restartQuiz()">↻ Έναρξη από την αρχή</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questionsData = [
+        {
+            id: 1,
+            question: "Ποιες δύο θεμελιώδεις Αρχές Διατήρησης εκφράζουν αντίστοιχα ο 1ος και ο 2ος Κανόνας του Kirchhoff;",
+            options: [
+                "1ος: Διατήρηση της Ενέργειας | 2ος: Διατήρηση του Φορτίου",
+                "1ος: Διατήρηση του Ηλεκτρικού Φορτίου | 2ος: Διατήρηση της Ενέργειας",
+                "1ος: Διατήρηση της Ορμής | 2ος: Διατήρηση της Μάζας",
+                "1ος: Διατήρηση της Ισχύος | 2ος: Διατήρηση της Τάσης"
+            ],
+            correct: 1,
+            hint: "Ο 1ος κανόνας αφορά τους κόμβους (ρεύματα/φορτία) και ο 2ος τους βρόχους (τάσεις/ενέργεια).",
+            justification: "Ο 1ος Κανόνας του Kirchhoff (Σ I_εισ = Σ I_εξ) εκφράζει την Αρχή Διατήρησης του Ηλεκτρικού Φορτίου, ενώ ο 2ος Κανόνας (Σ ΔV = 0 σε κλειστό βρόχο) εκφράζει την Αρχή Διατήρησης της Ενέργειας."
+        },
+        {
+            id: 2,
+            question: "Ποια είναι η διαφορά μεταξύ της Ηλεκτρεγερτικής Δύναμης (ΗΕΔ E) μιας πηγής και της Πολικής Τάσης V_πολ στους ακροδέκτες της όταν τροφοδοτεί εξωτερικό κύκλωμα;",
+            options: [
+                "Η ΗΕΔ E εκφράζει τη συνολική ενέργεια ανά μονάδα φορτίου που προσφέρει η πηγή (E = W/q), ενώ η V_πολ εκφράζει την τάση που παραδίδεται στο εξωτερικό κύκλωμα (V_πολ = E - I · r < E)",
+                "Η V_πολ είναι πάντα μεγαλύτερη από την ΗΕΔ E",
+                "Η ΗΕΔ E μετριέται σε Newtons και η V_πολ σε Volts",
+                "Δεν υπάρχει καμία διαφορά, είναι πάντα ίσες"
+            ],
+            correct: 0,
+            hint: "Η πραγματική πηγή έχει εσωτερική αντίσταση r, η οποία προκαλεί εσωτερική πτώση τάσης I·r όταν διαρρέεται από ρεύμα.",
+            justification: "Η ΗΕΔ E είναι σταθερή εγγενής ιδιότητα της πηγής (E = W/q). Όταν η πηγή τροφοδοτεί κύκλωμα με ρεύμα I, λόγω της εσωτερικής αντίστασης r η πολική τάση μειώνεται: V_πολ = E - I · r < E."
+        },
+        {
+            id: 3,
+            question: "Πότε η Πολική Τάση V_πολ στους ακροδέκτες πραγματικής πηγής ισούται ΑΚΡΙΒΩΣ με την ΗΕΔ E (V_πολ = E);",
+            options: [
+                "Στο ανοικτό κύκλωμα (I = 0) Ή όταν η πηγή είναι ιδανική (r = 0)",
+                "Όταν το κύκλωμα βραχυκυκλωθεί (R = 0)",
+                "Όταν η εξωτερική αντίσταση είναι ίση με την εσωτερική (R = r)",
+                "Όταν το ρεύμα πάρει τη μέγιστη τιμή του I_βρ"
+            ],
+            correct: 0,
+            hint: "Εξετάστε τη σχέση V_πολ = E - I · r. Για να ισχύει V_πολ = E, ο όρος I·r πρέπει να είναι μηδέν.",
+            justification: "V_πολ = E - I · r. Συνεπώς V_πολ = E είτε όταν I = 0 (ανοικτό κύκλωμα, δεν ρέει ρεύμα) είτε όταν r = 0 (ιδανική πηγή χωρίς εσωτερική αντίσταση)."
+        },
+        {
+            id: 4,
+            question: "Τρεις αντιστάτες R1 = 10 Ω, R2 = 20 Ω και R3 = 30 Ω συνδέονται ΠΑΡΑΛΛΗΛΑ. Ποια είναι η σχέση της ισοδύναμης αντίστασης R_ολ με τις επιμέρους αντιστάσεις;",
+            options: [
+                "R_ολ = 60 Ω",
+                "R_ολ < 10 Ω (η R_ολ είναι μικρότερη από τη μικρότερη αντίσταση του συστήματος R_min)",
+                "R_ολ = 20 Ω (ο μέσος όρος)",
+                "R_ολ > 30 Ω"
+            ],
+            correct: 1,
+            hint: "Στην παράλληλη σύνδεση 1/R_ολ = 1/R1 + 1/R2 + 1/R3, οπότε η ισοδύναμη αντίσταση μειώνεται πάντα κάτω από την ελάχιστη τιμή.",
+            justification: "Στην παράλληλη σύνδεση ισχύει 1/R_ολ = 1/10 + 1/20 + 1/30 = (6+3+2)/60 = 11/60 => R_ολ = 60/11 ≈ 5.45 Ω < 10 Ω (R_ολ < R_min)."
+        },
+        {
+            id: 5,
+            question: "Ποια είναι η διαφορά στη ρύθμιση της τάσης μεταξύ Ρεοστατικής σύνδεσης (σε σειρά) και Ποτενσιομετρικής σύνδεσης (διαιρέτης τάσης);",
+            options: [
+                "Η ρεοστατική σύνδεση μηδενίζει την τάση, ενώ η ποτενσιομετρική όχι",
+                "Η ποτενσιομετρική σύνδεση επιτρέπει τη συνεχή ρύθμιση της τάσης στον καταναλωτή από 0 V έως την πλήρη τάση της πηγής, ενώ η ρεοστατική σύνδεση ΔΕΝ μπορεί να μηδενίσει την τάση",
+                "Δεν υπάρχει καμία διαφορά στο εύρος ρύθμισης",
+                "Η ρεοστατική σύνδεση διπλασιάζει την ΗΕΔ της πηγής"
+            ],
+            correct: 1,
+            hint: "Στην ποτενσιομετρική σύνδεση, μετακινώντας τον δρομέα C στο άκρο A, η τάση R_AC μηδενίζεται (V_AC = 0 V).",
+            justification: "Η ποτενσιομετρική σύνδεση παρέχει εύρος ρύθμισης τάσης από 0 V έως V_πηγής. Αντίθετα, στη ρεοστατική σύνδεση (σε σειρά), το ρεύμα παραμένει πάντα θετικό (I > 0), οπότε η τάση στον καταναλωτή V = I·R_L δεν μπορεί να μηδενιστεί."
+        },
+        {
+            id: 6,
+            question: "Πώς ορίζεται ο συντελεστής απόδοσης α και η ποσοστιαία απόδοση α% ενός ηλεκτρικού αποδέκτη (π.χ. κινητήρα);",
+            options: [
+                "α = P_δαπ / P_ωφ και α% = α · 100%",
+                "α = P_ωφ / P_δαπ και α% = (P_ωφ / P_δαπ) · 100% (με α < 1 και α% < 100%)",
+                "α = P_θερμ / P_ωφ",
+                "α = P_ωφ · P_δαπ"
+            ],
+            correct: 1,
+            hint: "Είναι ο λόγος της χρήσιμης (ωφέλιμης) ισχύος προς τη συνολική προσφερόμενη (δαπανώμενη) ισχύ.",
+            justification: "Ο συντελεστής απόδοσης είναι α = P_ωφ / P_δαπ και η ποσοστιαία απόδοση α% = (P_ωφ / P_δαπ) · 100%. Λόγω εσωτερικών θερμικών απωλειών (P_θερμ > 0), ισχύει πάντα α < 1 (α% < 100%)."
+        },
+        {
+            id: 7,
+            question: "Στο κύκλωμα με πηγή (E = 20 V, r = 1 Ω) και εξωτερικό αντιστάτη R = 9 Ω, πόση είναι η ένταση του ρεύματος I, η πολική τάση V_πολ και η ολική παρεχόμενη ισχύς P_πηγ;",
+            options: [
+                "I = 2 A, V_πολ = 18 V, P_πηγ = 40 W",
+                "I = 2 A, V_πολ = 20 V, P_πηγ = 20 W",
+                "I = 1 A, V_πολ = 9 V, P_πηγ = 10 W",
+                "I = 2 A, V_πολ = 9 V, P_πηγ = 18 W"
+            ],
+            correct: 0,
+            hint: "I = E / (R + r), V_πολ = E - I · r και P_πηγ = E · I.",
+            justification: "I = 20 V / (9 + 1 Ω) = 20 / 10 = 2 A. V_πολ = E - I · r = 20 - (2 · 1) = 18 V (ή V_πολ = I · R = 2 · 9 = 18 V). P_πηγ = E · I = 20 V · 2 A = 40 W."
+        },
+        {
+            id: 8,
+            question: "Στο παραπάνω κύκλωμα (I = 2 A, r = 1 Ω, R = 9 Ω), πόση είναι η ωφέλιμη εξωτερική ισχύς P_εξ και πόση η εσωτερική θερμική ισχύς απωλειών P_εσ;",
+            options: [
+                "P_εξ = 36 W και P_εσ = 4 W (επαλήθευση: P_πηγ = 36 + 4 = 40 W)",
+                "P_εξ = 40 W και P_εσ = 0 W",
+                "P_εξ = 18 W και P_εσ = 2 W",
+                "P_εξ = 20 W και P_εσ = 20 W"
+            ],
+            correct: 0,
+            hint: "P_εξ = I² · R = V_πολ · I και P_εσ = I² · r.",
+            justification: "P_εξ = I² · R = 2² · 9 = 36 W (ή P_εξ = 18V · 2A = 36 W). P_εσ = I² · r = 2² · 1 = 4 W. Ισοζύγιο: P_πηγ = P_εξ + P_εσ => 40 W = 36 W + 4 W."
+        },
+        {
+            id: 9,
+            question: "Ηλεκτρικός ανεμιστήρας (αποδέκτης) καταναλώνει δαπανώμενη ισχύ P_δαπ = 100 W. Αν οι εσωτερικές θερμικές απώλειες είναι P_θερμ = 20 W, πόση είναι η ωφέλιμη μηχανική ισχύς P_μηχ και η ποσοστιαία απόδοση α%;",
+            options: [
+                "P_μηχ = 80 W και α% = 80%",
+                "P_μηχ = 120 W και α% = 120%",
+                "P_μηχ = 20 W και α% = 20%",
+                "P_μηχ = 100 W και α% = 100%"
+            ],
+            correct: 0,
+            hint: "P_μηχ = P_δαπ - P_θερμ και α% = (P_μηχ / P_δαπ) · 100%.",
+            justification: "P_μηχ = P_δαπ - P_θερμ = 100 W - 20 W = 80 W. α% = (80 / 100) · 100% = 80%."
+        },
+        {
+            id: 10,
+            question: "Στο τμήμα κυκλώματος Α-R-E-Β, κινούμαστε από το Α προς το Β. Αντιστάτης R = 3 Ω διαρρέεται από ρεύμα I = 2 A με φορά από το Α προς το Β και ακολουθεί πηγή ΗΕΔ E = 12 V (μετάβαση από τον - στον + πόλο). Πόση είναι η διαφορά δυναμικού V_AB = V_A - V_B;",
+            options: [
+                "V_AB = -6 V",
+                "V_AB = +6 V",
+                "V_AB = +18 V",
+                "V_AB = -18 V"
+            ],
+            correct: 0,
+            hint: "V_A - I · R + E = V_B => V_A - V_B = I · R - E.",
+            justification: "Ξεκινώντας από το Α: V_A - I · R + E = V_B => V_A - 2 · 3 + 12 = V_B => V_A + 6 = V_B => V_A - V_B = -6 V (δηλαδή V_B > V_A κατά 6 V)."
+        },
+        {
+            id: 11,
+            question: "Ποια είναι η μορφή της Χαρακτηριστικής Καμπύλης (V_πολ - I) μιας πραγματικής ηλεκτρικής πηγής (E, r);",
+            options: [
+                "Ευθεία γραμμή με αρνητική κλίση (κλίση = -r), σημείο τομής με τον άξονα V_πολ το E και σημείο τομής με τον άξονα I το I_βρ = E/r",
+                "Ευθεία από την αρχή των αξόνων με θετική κλίση R",
+                "Καμπύλη παραβολής",
+                "Οριζόντια ευθεία στα 0 V"
+            ],
+            correct: 0,
+            hint: "V_πολ = E - I · r.",
+            justification: "Η εξίσωση V_πολ = E - I·r παρίσταται από ευθεία με αρνητική κλίση (-r). Όταν I = 0 => V_πολ = E (τομή με V) και όταν V_πολ = 0 => I_βρ = E/r (τομή με I)."
+        },
+        {
+            id: 12,
+            question: "Δύο αντιστάτες R1 = 4 Ω και R2 = 12 Ω συνδέονται παράλληλα. Πόση είναι η ισοδύναμη αντίσταση R_ολ;",
+            options: [
+                "R_ολ = 3 Ω",
+                "R_ολ = 16 Ω",
+                "R_ολ = 8 Ω",
+                "R_ολ = 48 Ω"
+            ],
+            correct: 0,
+            hint: "R_ολ = (R1 · R2) / (R1 + R2).",
+            justification: "R_ολ = (4 · 12) / (4 + 12) = 48 / 16 = 3 Ω. (Παρατηρήστε ότι 3 Ω < 4 Ω)."
+        },
+        {
+            id: 13,
+            question: "Πόση ηλεκτρική ενέργεια σε Joules (J) καταναλώνει μια συσκευή ισχύος P = 2 kW (2000 W) που λειτουργεί για χρόνο t = 3 ώρες (10.800 s);",
+            options: [
+                "21.6 · 10^6 J (21.6 MJ ή 6 kWh)",
+                "6.000 J",
+                "3.6 · 10^6 J",
+                "600 J"
+            ],
+            correct: 0,
+            hint: "W = P · t = 2000 W · 10.800 s (ή 6 kWh = 6 · 3.6·10^6 J).",
+            justification: "W = P · t = 2000 W · 10.800 s = 21.6 · 10^6 J. Σε kWh: W = 2 kW · 3 h = 6 kWh = 6 · 3.6·10^6 J = 21.6·10^6 J."
+        },
+        {
+            id: 14,
+            question: "Τι συμβαίνει στο ρεύμα και στην τάση όταν βραχυκυκλωθεί μια πηγή (R = 0);",
+            options: [
+                "Η πολική τάση μηδενίζεται (V_πολ = 0) και το ρεύμα παίρνει τη μέγιστη επικίνδυνη τιμή I_βρ = E / r",
+                "Το ρεύμα μηδενίζεται και η τάση γίνεται άπειρη",
+                "Η τάση διπλασιάζεται και το ρεύμα υποδιπλασιάζεται",
+                "Η εσωτερική αντίσταση γίνεται άπειρη"
+            ],
+            correct: 0,
+            hint: "Στο βραχυκύκλωμα R = 0, οπότε V_πολ = I · R = 0.",
+            justification: "Στο βραχυκύκλωμα (R = 0), η πολική τάση μηδενίζεται (V_πολ = 0) και το ρεύμα εκτινάσσεται στην τιμή I_βρ = E / r, προκαλώντας τεράστιες εσωτερικές θερμικές απώλειες P_εσ = I_βρ² · r."
+        },
+        {
+            id: 15,
+            question: "Ποια είναι η δομή της 1ης και της 2ης διδακτικής ώρας της 18ης εβδομάδας σύμφωνα με το εγκεκριμένο πλάνο διδασκαλίας;",
+            options: [
+                "1η Ώρα: Διεξαγωγή ωριαίου γραπτού διαγωνίσματος (Θέματα Α, Β, Γ, Δ) | 2η Ώρα: Αναλυτική διόρθωση στον πίνακα, ανατροφοδότηση και κάλυψη μαθησιακών κενών",
+                "1η Ώρα: Διδασκαλία νέας ύλης | 2η Ώρα: Εργαστηριακή άσκηση",
+                "Και τις 2 ώρες προβολή εκπαιδευτικού βίντεο",
+                "Αυτοτελής μελέτη στο σπίτι"
+            ],
+            correct: 0,
+            hint: "Η 18η εβδομάδα είναι εβδομάδα ολοκλήρωσης, γραπτής δοκιμασίας και ανατροφοδότησης για το 2ο Κεφάλαιο.",
+            justification: "Σύμφωνα με το αναλυτικό πλάνο, κατά την 1η ώρα διεξάγεται η γραπτή δοκιμασία αξιολόγησης (διαγώνισμα), ενώ κατά τη 2η ώρα πραγματοποιείται η αναλυτική διόρθωση στον πίνακα, η συζήτηση των σφαλμάτων και η εμπέδωση των εννοιών."
+        }
+    ];
+
+    let currentMode = 'practice';
+    let currentQuestionIdx = 0;
+    let userAnswers = new Array(questionsData.length).fill(null);
+    let hintsUsed = new Array(questionsData.length).fill(false);
+
+    function selectMode(mode) {
+        currentMode = mode;
+        document.getElementById('mode-practice-card').classList.toggle('selected', mode === 'practice');
+        document.getElementById('mode-exam-card').classList.toggle('selected', mode === 'exam');
+    }
+
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        
+        userAnswers = new Array(questionsData.length).fill(null);
+        hintsUsed = new Array(questionsData.length).fill(false);
+        currentQuestionIdx = 0;
+
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+        document.getElementById('alert-msg').style.display = 'none';
+
+        if (currentMode === 'practice') {
+            document.getElementById('btn-prev').style.display = currentQuestionIdx > 0 ? 'inline-block' : 'none';
+            document.getElementById('btn-next').style.display = currentQuestionIdx < questionsData.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('btn-submit').style.display = currentQuestionIdx === questionsData.length - 1 ? 'inline-block' : 'none';
+            
+            updateProgressBar((currentQuestionIdx + 1) / questionsData.length * 100);
+
+            const q = questionsData[currentQuestionIdx];
+            container.appendChild(createQuestionCard(q, currentQuestionIdx, true));
+        } else {
+            document.getElementById('btn-prev').style.display = 'none';
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'inline-block';
+            
+            updateProgressBar(0);
+
+            questionsData.forEach((q, idx) => {
+                container.appendChild(createQuestionCard(q, idx, false));
+            });
+        }
+    }
+
+    function createQuestionCard(q, index, isPractice) {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `q-card-${index}`;
+
+        const header = document.createElement('div');
+        header.className = 'question-header';
+        header.innerHTML = `<span>Ερώτηση ${index + 1} από ${questionsData.length}</span>`;
+        card.appendChild(header);
+
+        const title = document.createElement('div');
+        title.className = 'question-title';
+        title.innerText = q.question;
+        card.appendChild(title);
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'options-list';
+
+        q.options.forEach((opt, optIdx) => {
+            const item = document.createElement('div');
+            item.className = 'option-item';
+            if (userAnswers[index] === optIdx) {
+                item.classList.add('selected');
+            }
+
+            if (isPractice && userAnswers[index] !== null) {
+                if (optIdx === q.correct) {
+                    item.classList.add('correct');
+                } else if (userAnswers[index] === optIdx) {
+                    item.classList.add('incorrect');
+                }
+            }
+
+            item.onclick = () => selectOption(index, optIdx, isPractice);
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = `q-${index}`;
+            radio.checked = userAnswers[index] === optIdx;
+
+            const label = document.createElement('span');
+            label.innerText = `${String.fromCharCode(65 + optIdx)}. ${opt}`;
+
+            item.appendChild(radio);
+            item.appendChild(label);
+            optionsList.appendChild(item);
+        });
+
+        card.appendChild(optionsList);
+
+        // Hint Button & Box
+        const hintBtn = document.createElement('button');
+        hintBtn.className = 'btn btn-hint';
+        hintBtn.innerText = '💡 Υπόδειξη';
+        hintBtn.onclick = () => toggleHint(index);
+        card.appendChild(hintBtn);
+
+        const hintBox = document.createElement('div');
+        hintBox.className = 'hint-box';
+        hintBox.id = `hint-box-${index}`;
+        hintBox.innerText = q.hint;
+        if (hintsUsed[index]) {
+            hintBox.style.display = 'block';
+        }
+        card.appendChild(hintBox);
+
+        // Justification Box (in Practice mode)
+        const justBox = document.createElement('div');
+        justBox.className = 'justification-box';
+        justBox.id = `just-box-${index}`;
+        justBox.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong><br>${q.justification}`;
+        if (isPractice && userAnswers[index] !== null) {
+            justBox.style.display = 'block';
+        }
+        card.appendChild(justBox);
+
+        return card;
+    }
+
+    function selectOption(qIdx, optIdx, isPractice) {
+        if (isPractice && userAnswers[qIdx] !== null) return;
+
+        userAnswers[qIdx] = optIdx;
+
+        if (isPractice) {
+            renderQuiz();
+        } else {
+            const card = document.getElementById(`q-card-${qIdx}`);
+            const items = card.querySelectorAll('.option-item');
+            items.forEach((item, idx) => {
+                item.classList.toggle('selected', idx === optIdx);
+                item.querySelector('input').checked = idx === optIdx;
+            });
+            updateExamProgress();
+        }
+    }
+
+    function toggleHint(qIdx) {
+        hintsUsed[qIdx] = !hintsUsed[qIdx];
+        const box = document.getElementById(`hint-box-${qIdx}`);
+        if (box) {
+            box.style.display = hintsUsed[qIdx] ? 'block' : 'none';
+        }
+    }
+
+    function updateProgressBar(percent) {
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function updateExamProgress() {
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        updateProgressBar((answeredCount / questionsData.length) * 100);
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIdx > 0) {
+            currentQuestionIdx--;
+            renderQuiz();
+        }
+    }
+
+    function nextQuestion() {
+        if (userAnswers[currentQuestionIdx] === null) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = 'Παρακαλώ επιλέξτε μια απάντηση πριν προχωρήσετε.';
+            alert.style.display = 'block';
+            return;
+        }
+        if (currentQuestionIdx < questionsData.length - 1) {
+            currentQuestionIdx++;
+            renderQuiz();
+        }
+    }
+
+    function submitQuiz() {
+        const unanswered = [];
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) unanswered.push(idx + 1);
+        });
+
+        if (unanswered.length > 0) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = `Παρακαλώ απαντήστε σε όλες τις ερωτήσεις πριν την υποβολή. Εκκρεμούν οι ερωτήσεις: ${unanswered.join(', ')}.`;
+            alert.style.display = 'block';
+            window.scrollTo({ top: alert.offsetTop - 20, behavior: 'smooth' });
+            return;
+        }
+
+        showReport();
+    }
+
+    function showReport() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('report-screen').style.display = 'block';
+
+        const nameInput = document.getElementById('student-name').value.trim();
+        const studentName = nameInput !== '' ? nameInput : 'Ανώνυμος/η Μαθητής/τρια';
+
+        let correctCount = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === questionsData[idx].correct) correctCount++;
+        });
+
+        const percentage = Math.round((correctCount / questionsData.length) * 100);
+        const now = new Date();
+        const dateTimeStr = now.toLocaleDateString('el-GR') + ' ' + now.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
+
+        document.getElementById('report-student-name').innerText = `Αναφορά Αποτελεσμάτων: ${studentName}`;
+        document.getElementById('report-meta-info').innerText = `Ημερομηνία: ${dateTimeStr} | Λειτουργία: ${currentMode === 'practice' ? 'Εκμάθηση' : 'Προσομοίωση'}`;
+        document.getElementById('report-score-display').innerText = `${correctCount} / ${questionsData.length} (${percentage}%)`;
+
+        let comment = '';
+        if (percentage >= 90) {
+            comment = '🌟 Άριστα! Εξαιρετική εμπεδωτική ολοκλήρωση του 2ου Κεφαλαίου (Συνεχές Ηλεκτρικό Ρεύμα)!';
+        } else if (percentage >= 75) {
+            comment = '👍 Πολύ καλά! Έχετε κατανοήσει τα περισσότερα σημεία του 2ου Κεφαλαίου.';
+        } else if (percentage >= 50) {
+            comment = '💡 Καλή προσπάθεια! Χρειάζεται μια μικρή επανάληψη στους υπολογισμούς ΗΕΔ, πολικής τάσης και απόδοσης αποδεκτών.';
+        } else {
+            comment = '📚 Χρειάζεται συστηματική μελέτη και επανάληψη όλων των ενοτήτων του 2ου Κεφαλαίου.';
+        }
+        document.getElementById('report-comment').innerText = comment;
+
+        const detailsContainer = document.getElementById('report-details-container');
+        detailsContainer.innerHTML = '';
+
+        questionsData.forEach((q, idx) => {
+            const isCorrect = userAnswers[idx] === q.correct;
+            const item = document.createElement('div');
+            item.className = `report-item ${isCorrect ? 'correct-item' : 'incorrect-item'}`;
+
+            const badge = document.createElement('span');
+            badge.className = `badge ${isCorrect ? 'badge-success' : 'badge-danger'}`;
+            badge.innerText = isCorrect ? '✓ ΣΩΣΤΟ' : '✗ ΛΑΘΟΣ';
+            item.appendChild(badge);
+
+            const qTitle = document.createElement('div');
+            qTitle.style.fontWeight = '600';
+            qTitle.style.marginBottom = '8px';
+            qTitle.innerText = `Ερώτηση ${idx + 1}: ${q.question}`;
+            item.appendChild(qTitle);
+
+            const userAnsDiv = document.createElement('div');
+            userAnsDiv.style.fontSize = '0.95rem';
+            userAnsDiv.innerHTML = `<strong>Η επιλογή σας:</strong> ${String.fromCharCode(65 + userAnswers[idx])}. ${q.options[userAnswers[idx]]}`;
+            userAnsDiv.style.color = isCorrect ? 'var(--correct-border)' : 'var(--incorrect-border)';
+            item.appendChild(userAnsDiv);
+
+            if (!isCorrect) {
+                const correctAnsDiv = document.createElement('div');
+                correctAnsDiv.style.fontSize = '0.95rem';
+                correctAnsDiv.style.color = 'var(--correct-border)';
+                correctAnsDiv.innerHTML = `<strong>Σωστή απάντηση:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}`;
+                item.appendChild(correctAnsDiv);
+            }
+
+            const justDiv = document.createElement('div');
+            justDiv.className = 'justification-box';
+            justDiv.style.display = 'block';
+            justDiv.style.marginTop = '10px';
+            justDiv.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong> ${q.justification}`;
+            item.appendChild(justDiv);
+
+            detailsContainer.appendChild(item);
+        });
+    }
+
+    function restartQuiz() {
+        document.getElementById('report-screen').style.display = 'none';
+        document.getElementById('start-screen').style.display = 'block';
+    }
+</script>
+
+</body>
+</html> 

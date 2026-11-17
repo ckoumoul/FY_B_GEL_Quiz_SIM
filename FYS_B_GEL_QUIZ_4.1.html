@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Φυσική Β΄ ΓΕΛ - 4η Εβδομάδα: Ηλεκτρική Δυναμική Ενέργεια</title>
+    <style>
+        :root {
+            --bg-color: #f7f4ef;
+            --text-color: #3a322b;
+            --primary-terracotta: #7a4b29;
+            --primary-hover: #633b1f;
+            --secondary-olive: #4e6e52;
+            --secondary-hover: #3d5740;
+            --accent-ochre: #d4b886;
+            --card-bg: #ffffff;
+            --border-color: #e2dacd;
+            --correct-bg: #eaf2eb;
+            --correct-border: #4e6e52;
+            --incorrect-bg: #fbeaea;
+            --incorrect-border: #a83b3b;
+            --hint-bg: #fdf8ec;
+            --hint-border: #d4b886;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(58, 50, 43, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--primary-terracotta);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        header h2 {
+            color: var(--secondary-olive);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #fcfbfa;
+            color: var(--text-color);
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-terracotta);
+        }
+
+        .mode-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mode-card {
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            background-color: #fdfcfb;
+        }
+
+        .mode-card:hover {
+            border-color: var(--primary-terracotta);
+            transform: translateY(-2px);
+        }
+
+        .mode-card.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .mode-card h3 {
+            color: var(--primary-terracotta);
+            margin-bottom: 8px;
+        }
+
+        .mode-card p {
+            font-size: 0.9rem;
+            color: #665a50;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-terracotta);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-olive);
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        .btn-hint {
+            background-color: transparent;
+            color: var(--primary-terracotta);
+            border: 1px dashed var(--primary-terracotta);
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        .btn-hint:hover {
+            background-color: #f7ede5;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary-olive);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--secondary-olive);
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #fcfbfa;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-ochre);
+            background-color: #fbf8f3;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-terracotta);
+            background-color: #f7ede5;
+        }
+
+        .option-item.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            color: #1e3b23;
+        }
+
+        .option-item.incorrect {
+            border-color: var(--incorrect-border);
+            background-color: var(--incorrect-bg);
+            color: #5c1919;
+        }
+
+        .option-item input {
+            margin-right: 12px;
+            accent-color: var(--primary-terracotta);
+        }
+
+        .hint-box {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 16px;
+            background-color: var(--hint-bg);
+            border-left: 4px solid var(--hint-border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #594833;
+        }
+
+        .justification-box {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background-color: var(--correct-bg);
+            border-left: 4px solid var(--correct-border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #1e3b23;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .report-header {
+            background-color: #f7ede5;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .report-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-terracotta);
+            margin: 10px 0;
+        }
+
+        .report-meta {
+            font-size: 0.95rem;
+            color: #5c5046;
+            margin-bottom: 12px;
+        }
+
+        .pedagogical-comment {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--secondary-olive);
+            padding: 12px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+        }
+
+        .report-item {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .report-item.correct-item {
+            border-left: 6px solid var(--correct-border);
+        }
+
+        .report-item.incorrect-item {
+            border-left: 6px solid var(--incorrect-border);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .badge-success {
+            background-color: var(--correct-bg);
+            color: var(--correct-border);
+        }
+
+        .badge-danger {
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .alert-box {
+            padding: 12px 16px;
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-border);
+            border: 1px solid var(--incorrect-border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            .report-actions, .quiz-footer, header p {
+                display: none !important;
+            }
+            .report-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Φυσική Β΄ ΓΕΛ (Γενικής Παιδείας)</h1>
+        <h2>4η Εβδομάδα: Κεφάλαιο 1.3 – Ηλεκτρική Δυναμική Ενέργεια</h2>
+    </header>
+
+    <!-- ΑΡΧΙΚΗ ΟΘΟΝΗ -->
+    <div id="start-screen">
+        <div class="form-group">
+            <label for="student-name">Ονοματεπώνυμο Μαθητή/τριας (Προαιρετικό):</label>
+            <input type="text" id="student-name" placeholder="Π.χ. Νίκος Βασιλείου">
+        </div>
+
+        <div class="form-group">
+            <label>Επιλέξτε Λειτουργία Quiz:</label>
+            <div class="mode-selection">
+                <div class="mode-card selected" id="mode-practice-card" onclick="selectMode('practice')">
+                    <h3>🎮 Εκμάθηση & Εξάσκησή</h3>
+                    <p>Βήμα-βήμα υποβολή με άμεση ανατροφοδότηση, υπόδειξη και αιτιολογία σε κάθε ερώτηση.</p>
+                </div>
+                <div class="mode-card" id="mode-exam-card" onclick="selectMode('exam')">
+                    <h3>📝 Προσομοίωση & Τεστ</h3>
+                    <p>Συγκεντρωτική εμφάνιση όλων των ερωτήσεων. Υποβολή στο τέλος με αναλυτικό Report.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-primary" onclick="startQuiz()" style="font-size: 1.1rem; padding: 14px 40px;">Έναρξη Quiz</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ QUIZ -->
+    <div id="quiz-screen" style="display: none;">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div id="alert-msg" class="alert-box"></div>
+
+        <div id="questions-container"></div>
+
+        <div class="quiz-footer">
+            <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()" style="display: none;">← Προηγούμενη</button>
+            <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Επόμενη →</button>
+            <button class="btn btn-primary" id="btn-submit" onclick="submitQuiz()" style="display: none;">Ολοκλήρωση & Υποβολή</button>
+        </div>
+    </div>
+
+    <!-- ΟΘΟΝΗ REPORT -->
+    <div id="report-screen" style="display: none;">
+        <div class="report-header">
+            <h2 id="report-student-name" style="color: var(--primary-terracotta);">Αναφορά Αποτελεσμάτων</h2>
+            <div class="report-meta" id="report-meta-info"></div>
+            <div class="report-score" id="report-score-display">0 / 0</div>
+            <div class="pedagogical-comment" id="report-comment"></div>
+        </div>
+
+        <h3 style="margin-bottom: 20px; color: var(--primary-terracotta);">Αναλυτική Επισκόπηση Ερωτήσεων</h3>
+        <div id="report-details-container"></div>
+
+        <div class="report-actions">
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Εκτύπωση / Αποθήκευση σε PDF</button>
+            <button class="btn btn-primary" onclick="restartQuiz()">↻ Έναρξη από την αρχή</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questionsData = [
+        {
+            id: 1,
+            question: "Ποιος είναι ο μαθηματικός τύπος υπολογισμού της ηλεκτρικής δυναμικής ενέργειας U συστήματος δύο σημειακών φορτίων q1 και q2 που απέχουν απόσταση r στο κενό;",
+            options: [
+                "U = k · |q1 · q2| / r²",
+                "U = k · q1 · q2 / r",
+                "U = k · (q1 + q2) / r",
+                "U = k · q1 · q2 / r²"
+            ],
+            correct: 1,
+            hint: "Η δυναμική ενέργεια είναι μονόμετρο μέγεθος και εξαρτάται από την απόσταση r (όχι r²), ενώ τα πρόσημα των φορτίων διατηρούνται.",
+            justification: "Η δυναμική ενέργεια δίνεται από τον τύπο U = k · q1 · q2 / r. Σε αντίθεση με τη δύναμη Coulomb, η δυναμική ενέργεια περιλαμβάνει τα πρόσημα των φορτίων και η απόσταση r είναι στον πρώτο βαθμό."
+        },
+        {
+            id: 2,
+            question: "Ποια είναι η θεμελιώδης μονάδα μέτρησης της ηλεκτρικής δυναμικής ενέργειας στο Διεθνές Σύστημα Μονάδων (S.I.);",
+            options: [
+                "1 Newton (N)",
+                "1 Volt (V)",
+                "1 Joule (J)",
+                "1 Coulomb (C)"
+            ],
+            correct: 2,
+            hint: "Όπως κάθε μορφή ενέργειας και έργου στη Φυσική, μετριέται στην ίδια μονάδα.",
+            justification: "Η μονάδα μέτρησης της ηλεκτρικής δυναμικής ενέργειας U στο S.I. είναι το 1 Joule (1 J)."
+        },
+        {
+            id: 3,
+            question: "Πού ορίζεται κατά σύμβαση το επίπεδο μηδενικής ηλεκτρικής δυναμικής ενέργειας (U = 0) για ένα σύστημα σημειακών φορτίων;",
+            options: [
+                "Στην επιφάνεια της Γης",
+                "Στο μέσο της απόστασης των φορτίων",
+                "Σε άπειρη απόσταση μεταξύ των φορτίων (r -> άπειρο)",
+                "Στο σημείο όπου η δύναμη Coulomb γίνεται μέγιστη"
+            ],
+            correct: 2,
+            hint: "Όταν η απόσταση r τείνει στο άπειρο, ο παρονομαστής του τύπου U = k·q1·q2/r γίνεται απείρως μεγάλος.",
+            justification: "Κατά σύμβαση, θεωρούμε U = 0 όταν τα φορτία απέχουν άπειρη απόσταση (r -> ∞), διότι σε άπειρη απόσταση μηδενίζεται η αλληλεπίδραση Coulomb."
+        },
+        {
+            id: 4,
+            question: "Τι φυσική σημασία έχει το θετικό πρόσημο (U > 0) στην ηλεκτρική δυναμική ενέργεια ενός συστήματος δύο σημειακών φορτίων;",
+            options: [
+                "Τα φορτία είναι ετερώνυμα και έλκονται",
+                "Τα φορτία είναι ομώνυμα (απωστική αλληλεπίδραση) και απαιτείται προσφορά έργου από εξωτερικό παράγοντα για να πλησιάσουν από το άπειρο",
+                "Το σύστημα είναι δέσμιο και δεν μπορεί να διασπαστεί",
+                "Η δύναμη Coulomb είναι μηδενική"
+            ],
+            correct: 1,
+            hint: "Για ομώνυμα φορτία (q1·q2 > 0), το γινόμενο είναι θετικό.",
+            justification: "Όταν q1·q2 > 0 (ομώνυμα φορτία), η δυναμική ενέργεια U είναι θετική (U > 0). Αυτό σημαίνει ότι για να πλησιάσουν τα απωθούμενα φορτία από το άπειρο απαιτείται η προσφορά έργου από εξωτερικό παράγοντα."
+        },
+        {
+            id: 5,
+            question: "Τι σημαίνει ότι η δυναμική ενέργεια συστήματος δύο σημειακών φορτίων είναι αρνητική (U < 0);",
+            options: [
+                "Τα φορτία είναι ομώνυμα",
+                "Τα φορτία είναι ετερώνυμα (ελκτική αλληλεπίδραση) και το σύστημα είναι συγκρατούμενο / δέσμιο",
+                "Τα φορτία απέχουν άπειρη απόσταση",
+                "Η ηλεκτρική δύναμη είναι απωστική"
+            ],
+            correct: 1,
+            hint: "Για ετερώνυμα φορτία, το ένα φορτίο είναι θετικό και το άλλο αρνητικό, οπότε q1·q2 < 0.",
+            justification: "Όταν q1·q2 < 0 (ετερώνυμα φορτία), η U είναι αρνητική (U < 0). Αυτό εκφράζει ελκτική αλληλεπίδραση και υποδηλώνει ότι το σύστημα είναι δέσμιο (απαιτείται προσφορά έργου για να απομακρυνθούν στο άπειρο)."
+        },
+        {
+            id: 6,
+            question: "Πώς συνδέεται το έργο W_(A->B) της ηλεκτρικής δύναμης Coulomb κατά τη μετακίνηση φορτίου από σημείο Α σε σημείο Β με τη μεταβολή της ηλεκτρικής δυναμικής ενέργειας ΔU;",
+            options: [
+                "W_(A->B) = ΔU = U_B - U_A",
+                "W_(A->B) = -ΔU = U_A - U_B",
+                "W_(A->B) = U_A + U_B",
+                "W_(A->B) = U_A · U_B"
+            ],
+            correct: 1,
+            hint: "Το Θεώρημα Έργου - Δυναμικής Ενέργειας συνδέει το έργο της συντηρητικής δύναμης με την αρχική μείον την τελική δυναμική ενέργεια.",
+            justification: "Για κάθε συντηρητική δύναμη όπως η Coulomb, το έργο ισούται με την ελάττωση της δυναμικής ενέργειας: W_(A->B) = U_A - U_B = -ΔU."
+        },
+        {
+            id: 7,
+            question: "Τι σημαίνει ότι η ηλεκτρική δύναμη Coulomb είναι συντηρητική (διατηρητική);",
+            options: [
+                "Το έργο της εξαρτάται από το σχήμα της τροχιάς/διαδρομής που ακολουθεί το φορτίο",
+                "Το έργο της είναι ανεξάρτητο από τη διαδρομή και εξαρτάται μόνο από την αρχική και τελική θέση",
+                "Το έργο της είναι πάντα αρνητικό",
+                "Προκαλεί πάντα απώλεια ενέργειας ως θερμότητα"
+            ],
+            correct: 1,
+            hint: "Σκεφτείτε αν το έργο μετακίνησης μεταξύ δύο σημείων Α και Β αλλάζει αν αλλάξουμε μονοπάτι.",
+            justification: "Η δύναμη Coulomb είναι συντηρητική, πράγμα που σημαίνει ότι το έργο της κατά τη μετακίνηση φορτίου μεταξύ δύο σημείων εξαρτάται μόνο από την αρχική και την τελική θέση και είναι ανεξάρτητο από τη διαδρομή."
+        },
+        {
+            id: 8,
+            question: "Πόσο είναι το έργο της ηλεκτρικής δύναμης Coulomb όταν ένα φορτίο μετακινείται κατά μήκος μιας κλειστής διαδρομής (δηλαδή επιστρέφει στην αρχική του θέση);",
+            options: [
+                "W_κλειστό > 0",
+                "W_κλειστό < 0",
+                "W_κλειστό = 0",
+                "Εξαρτάται από την ταχύτητα"
+            ],
+            correct: 2,
+            hint: "Αφού η αρχική και η τελική θέση ταυτίζονται, U_αρχική = U_τελική.",
+            justification: "Σε κάθε κλειστή διαδρομή (αρχική θέση = τελική θέση), η μεταβολή δυναμικής ενέργειας είναι μηδέν (ΔU = 0), οπότε W_κλειστό = -ΔU = 0."
+        },
+        {
+            id: 9,
+            question: "Υπολογίστε τη δυναμική ενέργεια U συστήματος δύο σημειακών φορτίων q1 = +4 μC (4·10^-6 C) και q2 = -6 μC (-6·10^-6 C) που απέχουν απόσταση r = 0.4 m στο κενό (k = 9·10^9 N·m²/C²).",
+            options: [
+                "-0.54 J",
+                "+0.54 J",
+                "-0.27 J",
+                "+0.27 J"
+            ],
+            correct: 0,
+            hint: "Εφαρμόστε τον τύπο U = k · q1 · q2 / r λαμβάνοντας υπόψη τα πρόσημα.",
+            justification: "U = (9·10^9) · (+4·10^-6) · (-6·10^-6) / 0.4 = (9·10^9) · (-24·10^-12) / 0.4 = -0.216 / 0.4 = -0.54 J."
+        },
+        {
+            id: 10,
+            question: "Δύο θετικά σημειακά φορτία q1 και q2 πλησιάζουν μεταξύ τους (η απόσταση r μειώνεται). Πώς μεταβάλλεται η ηλεκτρική δυναμική ενέργεια U του συστήματος;",
+            options: [
+                "Μειώνεται",
+                "Αυξάνεται (γίνεται πιο θετική)",
+                "Παραμένει σταθερή",
+                "Μηδενίζεται"
+            ],
+            correct: 1,
+            hint: "Για ομώνυμα φορτία U = k·q1·q2/r > 0. Όσο το r μικραίνει, το κλάσμα μεγαλώνει.",
+            justification: "Επειδή q1·q2 > 0, η δυναμική ενέργεια U είναι θετική. Καθώς η απόσταση r μειώνεται, η τιμή του U = k·q1·q2/r αυξάνεται."
+        },
+        {
+            id: 11,
+            question: "Κατά τη μετακίνηση δοκιμαστικού φορτίου q από σημείο Α σε σημείο Β ηλεκτρικού πεδίου, η ηλεκτρική δύναμη παράγει θετικό έργο (W_(A->B) > 0). Τι συμβαίνει στη δυναμική ενέργεια του πεδίου;",
+            options: [
+                "Η δυναμική ενέργεια αυξάνεται (U_B > U_A)",
+                "Η δυναμική ενέργεια μειώνεται (U_B < U_A)",
+                "Η δυναμική ενέργεια παραμένει σταθερή",
+                "Η δυναμική ενέργεια διπλασιάζεται"
+            ],
+            correct: 1,
+            hint: "W_(A->B) = U_A - U_B. Αν W_(A->B) > 0, τότε U_A > U_B.",
+            justification: "Όταν το πεδίο παράγει θετικό έργο (W_(A->B) > 0), η ηλεκτρική δυναμική ενέργεια του συστήματος ελαττώνεται (U_A - U_B > 0 => U_B < U_A)."
+        },
+        {
+            id: 12,
+            question: "Πώς υπολογίζεται η συνολική ηλεκτρική δυναμική ενέργεια U_ολ ενός συστήματος τριών σημειακών φορτίων q1, q2, q3;",
+            options: [
+                "U_ολ = U12 + U23 + U13 (αλγεβρικό άθροισμα των δυναμικών ενεργειών όλων των δυνατών ζευγών)",
+                "U_ολ = U12 · U23 · U13",
+                "U_ολ = (U12 + U23) / U13",
+                "U_ολ = U12 + U23 (μόνο των γειτονικών)"
+            ],
+            correct: 0,
+            hint: "Αθροίζουμε τη δυναμική ενέργεια κάθε δυνατού ζεύγους φορτίων στο σύστημα.",
+            justification: "Η συνολική δυναμική ενέργεια συστήματος n φορτίων είναι το αλγεβρικό άθροισμα των ενεργειών αλληλεπίδρασης όλων των διακριτών ζευγών: U_ολ = U12 + U23 + U13."
+        },
+        {
+            id: 13,
+            question: "Δύο ετερώνυμα σημειακά φορτία q1 > 0 και q2 < 0 αφήνονται ελεύθερα και λόγω της ελκτικής δύναμης Coulomb πλησιάζουν μεταξύ τους. Τι συμβαίνει στη δυναμική ενέργεια U και στην κινητική ενέργεια K του συστήματος;",
+            options: [
+                "Η U αυξάνεται και η K μειώνεται",
+                "Η U μειώνεται (γίνεται πιο αρνητική) και η K αυξάνεται",
+                "Και η U και η K αυξάνονται",
+                "Και η U και η K παραμένουν σταθερές"
+            ],
+            correct: 1,
+            hint: "Η ηλεκτρική δύναμη παράγει θετικό έργο κατά την προσέγγιση (W > 0), άρα η K αυξάνεται και η U μειώνεται (ΑΔΜΕ).",
+            justification: "Η ελκτική δύναμη παράγει θετικό έργο (W > 0), οπότε σύμφωνα με την ΑΔΜΕ (K + U = σταθερό), η κινητική ενέργεια K αυξάνεται ενώ η δυναμική ενέργεια U μειώνεται (γίνεται πιο αρνητική)."
+        },
+        {
+            id: 14,
+            question: "Αν η ηλεκτρική δυναμική ενέργεια ζεύγους φορτίων στη θέση Α είναι U_A = +15 J και στη θέση Β είναι U_B = +5 J, πόσο έργο παράγει η ηλεκτρική δύναμη κατά τη μετακίνηση από το Α στο Β;",
+            options: [
+                "-10 J",
+                "+10 J",
+                "+20 J",
+                "-20 J"
+            ],
+            correct: 1,
+            hint: "W_(A->B) = U_A - U_B.",
+            justification: "W_(A->B) = U_A - U_B = (+15 J) - (+5 J) = +10 J."
+        },
+        {
+            id: 15,
+            question: "Ποιο από τα παρακάτω διαγράμματα παριστάνει ποιοτικά τη μεταβολή της δυναμικής ενέργειας U σε συνάρτηση με την απόσταση r για δύο ομώνυμα φορτία (q1·q2 > 0);",
+            options: [
+                "Υπερβολή στο 1ο τεταρτημόριο (U > 0, μειώνεται προς το 0 καθώς r -> άπειρο)",
+                "Υπερβολή στο 4ο τεταρτημόριο (U < 0)",
+                "Ευθεία γραμμή που διέρχεται από την αρχή των αξόνων",
+                "Οριζόντια ευθεία σταθερής τιμής"
+            ],
+            correct: 0,
+            hint: "Για q1·q2 > 0, η U είναι θετική (U > 0) και αντιστρόφως ανάλογη της απόστασης r (1/r).",
+            justification: "Για ομώνυμα φορτία (U > 0), η U(r) = k·q1·q2/r παρίσταται από υπερβολή στο 1ο τεταρτημόριο, η οποία τείνει στο μηδέν καθώς η απόσταση r τείνει στο άπειρο."
+        }
+    ];
+
+    let currentMode = 'practice';
+    let currentQuestionIdx = 0;
+    let userAnswers = new Array(questionsData.length).fill(null);
+    let hintsUsed = new Array(questionsData.length).fill(false);
+
+    function selectMode(mode) {
+        currentMode = mode;
+        document.getElementById('mode-practice-card').classList.toggle('selected', mode === 'practice');
+        document.getElementById('mode-exam-card').classList.toggle('selected', mode === 'exam');
+    }
+
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        
+        userAnswers = new Array(questionsData.length).fill(null);
+        hintsUsed = new Array(questionsData.length).fill(false);
+        currentQuestionIdx = 0;
+
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+        document.getElementById('alert-msg').style.display = 'none';
+
+        if (currentMode === 'practice') {
+            document.getElementById('btn-prev').style.display = currentQuestionIdx > 0 ? 'inline-block' : 'none';
+            document.getElementById('btn-next').style.display = currentQuestionIdx < questionsData.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('btn-submit').style.display = currentQuestionIdx === questionsData.length - 1 ? 'inline-block' : 'none';
+            
+            updateProgressBar((currentQuestionIdx + 1) / questionsData.length * 100);
+
+            const q = questionsData[currentQuestionIdx];
+            container.appendChild(createQuestionCard(q, currentQuestionIdx, true));
+        } else {
+            document.getElementById('btn-prev').style.display = 'none';
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'inline-block';
+            
+            updateProgressBar(0);
+
+            questionsData.forEach((q, idx) => {
+                container.appendChild(createQuestionCard(q, idx, false));
+            });
+        }
+    }
+
+    function createQuestionCard(q, index, isPractice) {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `q-card-${index}`;
+
+        const header = document.createElement('div');
+        header.className = 'question-header';
+        header.innerHTML = `<span>Ερώτηση ${index + 1} από ${questionsData.length}</span>`;
+        card.appendChild(header);
+
+        const title = document.createElement('div');
+        title.className = 'question-title';
+        title.innerText = q.question;
+        card.appendChild(title);
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'options-list';
+
+        q.options.forEach((opt, optIdx) => {
+            const item = document.createElement('div');
+            item.className = 'option-item';
+            if (userAnswers[index] === optIdx) {
+                item.classList.add('selected');
+            }
+
+            if (isPractice && userAnswers[index] !== null) {
+                if (optIdx === q.correct) {
+                    item.classList.add('correct');
+                } else if (userAnswers[index] === optIdx) {
+                    item.classList.add('incorrect');
+                }
+            }
+
+            item.onclick = () => selectOption(index, optIdx, isPractice);
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = `q-${index}`;
+            radio.checked = userAnswers[index] === optIdx;
+
+            const label = document.createElement('span');
+            label.innerText = `${String.fromCharCode(65 + optIdx)}. ${opt}`;
+
+            item.appendChild(radio);
+            item.appendChild(label);
+            optionsList.appendChild(item);
+        });
+
+        card.appendChild(optionsList);
+
+        // Hint Button & Box
+        const hintBtn = document.createElement('button');
+        hintBtn.className = 'btn btn-hint';
+        hintBtn.innerText = '💡 Υπόδειξη';
+        hintBtn.onclick = () => toggleHint(index);
+        card.appendChild(hintBtn);
+
+        const hintBox = document.createElement('div');
+        hintBox.className = 'hint-box';
+        hintBox.id = `hint-box-${index}`;
+        hintBox.innerText = q.hint;
+        if (hintsUsed[index]) {
+            hintBox.style.display = 'block';
+        }
+        card.appendChild(hintBox);
+
+        // Justification Box (in Practice mode)
+        const justBox = document.createElement('div');
+        justBox.className = 'justification-box';
+        justBox.id = `just-box-${index}`;
+        justBox.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong><br>${q.justification}`;
+        if (isPractice && userAnswers[index] !== null) {
+            justBox.style.display = 'block';
+        }
+        card.appendChild(justBox);
+
+        return card;
+    }
+
+    function selectOption(qIdx, optIdx, isPractice) {
+        if (isPractice && userAnswers[qIdx] !== null) return;
+
+        userAnswers[qIdx] = optIdx;
+
+        if (isPractice) {
+            renderQuiz();
+        } else {
+            const card = document.getElementById(`q-card-${qIdx}`);
+            const items = card.querySelectorAll('.option-item');
+            items.forEach((item, idx) => {
+                item.classList.toggle('selected', idx === optIdx);
+                item.querySelector('input').checked = idx === optIdx;
+            });
+            updateExamProgress();
+        }
+    }
+
+    function toggleHint(qIdx) {
+        hintsUsed[qIdx] = !hintsUsed[qIdx];
+        const box = document.getElementById(`hint-box-${qIdx}`);
+        if (box) {
+            box.style.display = hintsUsed[qIdx] ? 'block' : 'none';
+        }
+    }
+
+    function updateProgressBar(percent) {
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function updateExamProgress() {
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        updateProgressBar((answeredCount / questionsData.length) * 100);
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIdx > 0) {
+            currentQuestionIdx--;
+            renderQuiz();
+        }
+    }
+
+    function nextQuestion() {
+        if (userAnswers[currentQuestionIdx] === null) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = 'Παρακαλώ επιλέξτε μια απάντηση πριν προχωρήσετε.';
+            alert.style.display = 'block';
+            return;
+        }
+        if (currentQuestionIdx < questionsData.length - 1) {
+            currentQuestionIdx++;
+            renderQuiz();
+        }
+    }
+
+    function submitQuiz() {
+        const unanswered = [];
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) unanswered.push(idx + 1);
+        });
+
+        if (unanswered.length > 0) {
+            const alert = document.getElementById('alert-msg');
+            alert.innerText = `Παρακαλώ απαντήστε σε όλες τις ερωτήσεις πριν την υποβολή. Εκκρεμούν οι ερωτήσεις: ${unanswered.join(', ')}.`;
+            alert.style.display = 'block';
+            window.scrollTo({ top: alert.offsetTop - 20, behavior: 'smooth' });
+            return;
+        }
+
+        showReport();
+    }
+
+    function showReport() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('report-screen').style.display = 'block';
+
+        const nameInput = document.getElementById('student-name').value.trim();
+        const studentName = nameInput !== '' ? nameInput : 'Ανώνυμος/η Μαθητής/τρια';
+
+        let correctCount = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === questionsData[idx].correct) correctCount++;
+        });
+
+        const percentage = Math.round((correctCount / questionsData.length) * 100);
+        const now = new Date();
+        const dateTimeStr = now.toLocaleDateString('el-GR') + ' ' + now.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
+
+        document.getElementById('report-student-name').innerText = `Αναφορά Αποτελεσμάτων: ${studentName}`;
+        document.getElementById('report-meta-info').innerText = `Ημερομηνία: ${dateTimeStr} | Λειτουργία: ${currentMode === 'practice' ? 'Εκμάθηση' : 'Προσομοίωση'}`;
+        document.getElementById('report-score-display').innerText = `${correctCount} / ${questionsData.length} (${percentage}%)`;
+
+        let comment = '';
+        if (percentage >= 90) {
+            comment = '🌟 Άριστα! Πλήρης κατανόηση της Ηλεκτρικής Δυναμικής Ενέργειας και του Έργου Coulomb!';
+        } else if (percentage >= 75) {
+            comment = '👍 Πολύ καλά! Έχετε κατανοήσει τα περισσότερα σημεία της 4ης εβδομάδας.';
+        } else if (percentage >= 50) {
+            comment = '💡 Καλή προσπάθεια! Χρειάζεται μια μικρή επανάληψη στη σχέση W = -ΔU και στα πρόσημα της ενέργειας.';
+        } else {
+            comment = '📚 Χρειάζεται συστηματική μελέτη της θεωρίας και των παραδειγμάτων του Κεφαλαίου 1.3.';
+        }
+        document.getElementById('report-comment').innerText = comment;
+
+        const detailsContainer = document.getElementById('report-details-container');
+        detailsContainer.innerHTML = '';
+
+        questionsData.forEach((q, idx) => {
+            const isCorrect = userAnswers[idx] === q.correct;
+            const item = document.createElement('div');
+            item.className = `report-item ${isCorrect ? 'correct-item' : 'incorrect-item'}`;
+
+            const badge = document.createElement('span');
+            badge.className = `badge ${isCorrect ? 'badge-success' : 'badge-danger'}`;
+            badge.innerText = isCorrect ? '✓ ΣΩΣΤΟ' : '✗ ΛΑΘΟΣ';
+            item.appendChild(badge);
+
+            const qTitle = document.createElement('div');
+            qTitle.style.fontWeight = '600';
+            qTitle.style.marginBottom = '8px';
+            qTitle.innerText = `Ερώτηση ${idx + 1}: ${q.question}`;
+            item.appendChild(qTitle);
+
+            const userAnsDiv = document.createElement('div');
+            userAnsDiv.style.fontSize = '0.95rem';
+            userAnsDiv.innerHTML = `<strong>Η επιλογή σας:</strong> ${String.fromCharCode(65 + userAnswers[idx])}. ${q.options[userAnswers[idx]]}`;
+            userAnsDiv.style.color = isCorrect ? 'var(--correct-border)' : 'var(--incorrect-border)';
+            item.appendChild(userAnsDiv);
+
+            if (!isCorrect) {
+                const correctAnsDiv = document.createElement('div');
+                correctAnsDiv.style.fontSize = '0.95rem';
+                correctAnsDiv.style.color = 'var(--correct-border)';
+                correctAnsDiv.innerHTML = `<strong>Σωστή απάντηση:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}`;
+                item.appendChild(correctAnsDiv);
+            }
+
+            const justDiv = document.createElement('div');
+            justDiv.className = 'justification-box';
+            justDiv.style.display = 'block';
+            justDiv.style.marginTop = '10px';
+            justDiv.innerHTML = `<strong>Τεκμηρίωση / Αιτιολογία:</strong> ${q.justification}`;
+            item.appendChild(justDiv);
+
+            detailsContainer.appendChild(item);
+        });
+    }
+
+    function restartQuiz() {
+        document.getElementById('report-screen').style.display = 'none';
+        document.getElementById('start-screen').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
